@@ -12,8 +12,7 @@ If you change `apps-script.gs` later, use **Deploy → Manage deployments → ed
 ## What is collected and where it lives
 - Signups tab: name, school, level, email (the consent columns stay blank). Events tab: page, lab, set, score and time, linked to the signup by a random `uid`. Nothing else.
 - It lives only in your Google Sheet. The public web app can add rows but cannot read any.
-- A student who deletes their details from the site has their Signups row removed automatically. Their old Events rows stay but are no longer linked to a name. Withdrawals logs the id and time only.
-- To answer an access or deletion request by email, find the row by email in Signups and delete it.
+- Once signed up, students cannot edit or delete their details on the site. To see, correct or delete them they email the contact address shown on the form (`contact` in `assets/config.js`). Find the row by email in Signups and delete it. Their Events rows then no longer link to a name.
 
 ## Before students use it
 The form no longer has an agreement tick box or a skip button. It still carries a short line saying what the details are used for. Students are mostly minors in Singapore, so please check with your school whoever handles PDPA that this is enough (notification of purpose, retention, who sees the data), and set `contact` so students know who to ask.

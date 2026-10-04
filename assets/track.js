@@ -71,7 +71,6 @@
     '#syn-card .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}' +
     '#syn-card button{font:600 15px Catamaran,Inter,system-ui,sans-serif;padding:10px 18px;border-radius:10px;border:1px solid var(--c-line);background:transparent;color:var(--c-ink);cursor:pointer}' +
     '#syn-card button.p{background:var(--c-acc);border-color:var(--c-acc);color:var(--c-on)}' +
-    '#syn-card button.d{border-color:transparent;color:var(--c-bad);margin-left:auto}' +
     '#syn-card button:focus-visible,#syn-card input:focus-visible,#syn-card select:focus-visible{outline:3px solid var(--c-acc);outline-offset:2px}' +
     '#syn-err{color:var(--c-bad);font-size:13px;min-height:1em;margin:8px 0 0}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
@@ -98,33 +97,26 @@
   function open(mode) {
     if (overlay) return;
     lastFocus = document.activeElement; ovMode = mode;
-    var edit = mode === 'edit' && profile, gate = mode === 'gate';
+    var gate = mode === 'gate';
     overlay = document.createElement('div'); overlay.id = 'syn-ov';
     overlay.innerHTML =
       '<form id="syn-card" role="dialog" aria-modal="true" aria-labelledby="syn-h" novalidate>' +
-      '<h2 id="syn-h">' + (edit ? 'Your details' : gate ? 'Sign up to keep going' : 'Welcome to Synapse Econs') + '</h2>' +
-      '<p>' + (edit ? 'You can update or delete the details we hold about you.' :
+      '<h2 id="syn-h">' + (gate ? 'Sign up to keep going' : 'Welcome to Synapse Econs') + '</h2>' +
+      '<p>' + (
         gate ? 'Your first question was free. Enter your details to keep practising. It takes 30 seconds.' : 'Enter your details to start. It takes 30 seconds.') + '</p>' +
       '<label class="f" for="syn-name">Name</label><input id="syn-name" type="text" autocomplete="name" maxlength="80" required>' +
       '<label class="f" for="syn-school">School</label><input id="syn-school" type="text" autocomplete="organization" maxlength="80" required>' +
       '<label class="f" for="syn-level">Level</label><select id="syn-level" required><option value="">Choose…</option><option>JC1</option><option>JC2</option><option>Other</option></select>' +
       '<label class="f" for="syn-email">Email</label><input id="syn-email" type="email" autocomplete="email" maxlength="120" required>' +
-      '<p class="small">We use your details to see who is using Synapse Econs and how, and keep them private. You can see, change or delete them from the last link in the menu bar (it shows your first name)' + (CFG.contact ? ', or email ' + CFG.contact.replace(/[<>&"]/g, '') : '') + '.</p>' +
+      '<p class="small">We use your details to see who is using Synapse Econs and how, and keep them private. Your details cannot be changed here after you sign up' + (CFG.contact ? '. To see, correct or delete them, email ' + CFG.contact.replace(/[<>&"]/g, '') : '') + '.</p>' +
       '<div id="syn-err" role="alert"></div>' +
-      '<div class="row"><button type="submit" class="p">' + (edit ? 'Save' : 'Start') + '</button>' +
+      '<div class="row"><button type="submit" class="p">' + 'Start' + '</button>' +
       (gate ? '' : '<button type="button" id="syn-skip">Close</button>') +
-      (edit ? '<button type="button" class="d" id="syn-del">Delete my details</button>' : '') + '</div></form>';
+      '</div></form>';
     document.body.appendChild(overlay);
     document.addEventListener('keydown', onKey, true);
     var $ = function (id) { return overlay.querySelector('#' + id); };
-    if (edit) { $('syn-name').value = profile.name; $('syn-school').value = profile.school; $('syn-level').value = profile.level; $('syn-email').value = profile.email; }
     if (!gate) $('syn-skip').onclick = close;
-    if (edit) $('syn-del').onclick = function () {
-      if (!window.confirm('Delete your details? Your lab progress on this device stays.')) return;
-      var id = profile.uid;
-      profile = { uid: id }; send('withdraw', {}); profile = null;
-      del(PK); label(); close();
-    };
     overlay.querySelector('form').onsubmit = function (ev) {
       ev.preventDefault();
       var v = { name: $('syn-name').value.trim(), school: $('syn-school').value.trim(), level: $('syn-level').value, email: $('syn-email').value.trim() };
@@ -134,7 +126,7 @@
       else if (!v.level) err = 'Please choose your level.';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) err = 'Please enter a valid email address.';
       if (err) { $('syn-err').textContent = err; return; }
-      profile = { uid: (profile && profile.uid) || uid(), name: v.name, school: v.school, level: v.level, email: v.email, signed_up_at: (profile && profile.signed_up_at) || new Date().toISOString() };
+      profile = { uid: uid(), name: v.name, school: v.school, level: v.level, email: v.email, signed_up_at: new Date().toISOString() };
       set(PK, profile);
       send('signup', {}, { name: v.name, school: v.school, level: v.level, email: v.email, signed_up_at: profile.signed_up_at });
       send('view', {});
@@ -146,12 +138,18 @@
 
   /* ---------- nav link ---------- */
   var navLink = null;
-  function label() { if (navLink) navLink.textContent = profile && profile.name ? 'Hi, ' + profile.name.split(' ')[0].slice(0, 12) : 'Sign up'; }
+  function label() {
+    if (!navLink) return;
+    var on = profile && profile.name;
+    navLink.textContent = on ? 'Hi, ' + profile.name.split(' ')[0].slice(0, 12) : 'Sign up';
+    if (on) { navLink.removeAttribute('href'); navLink.style.cursor = 'default'; navLink.setAttribute('aria-disabled', 'true'); }
+    else { navLink.href = '#'; navLink.style.cursor = ''; navLink.removeAttribute('aria-disabled'); }
+  }
   function init() {
     var links = document.querySelector('.nav-links');
     if (links) {
       navLink = document.createElement('a'); navLink.href = '#'; navLink.id = 'syn-nav';
-      navLink.onclick = function (e) { e.preventDefault(); open(profile ? 'edit' : 'new'); };
+      navLink.onclick = function (e) { e.preventDefault(); if (!profile) open('new'); };
       links.appendChild(navLink); label();
     }
     if (profile) { send('view', {}); flush(); }
