@@ -23,6 +23,8 @@
     <a href="concepts.html" data-page="concepts">Concepts</a>
     <a href="shifts.html" data-page="shifts">Diagrams</a>
     <a href="chains.html" data-page="chains">Chains</a>
+    <a href="data.html" data-page="data">Data</a>
+    <a href="evaluate.html" data-page="evaluate">Evaluate</a>
   </div>
 </nav>
 <script>
@@ -208,13 +210,14 @@ const CHAINS=[
 ];
 
 const THEME_NAMES={1:"Central economic problem",2:"Markets",3:"National economy"};
+const YEAR={1:"JC1",2:"JC1",3:"JC2"};
 CHAINS.forEach((v,i)=>{v.id=i;v.th=+v.k[0]});
-const KEY='synapse-econs-chains-v1';let st={box:{},th:[1,2,3]};
+const KEY='synapse-econs-chains-v2';let st={box:{},th:[1,2]};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const MASTER=3;const pool=()=>CHAINS.filter(v=>st.th.includes(v.th));
 const thEl=document.getElementById('themes');
-[1,2,3].forEach(t=>{const b=document.createElement('button');b.className='lv';b.textContent=`${t} · ${THEME_NAMES[t]}`;b.setAttribute('aria-pressed',st.th.includes(t));
+[1,2,3].forEach(t=>{const b=document.createElement('button');b.className='lv';b.textContent=`${t} · ${THEME_NAMES[t]} (${YEAR[t]})`;b.setAttribute('aria-pressed',st.th.includes(t));
   b.onclick=()=>{const on=st.th.includes(t);if(on&&st.th.length===1)return;st.th=on?st.th.filter(x=>x!==t):[...st.th,t].sort();b.setAttribute('aria-pressed',!on);save();meter();startDrill()};thEl.appendChild(b)});
 function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
   document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}

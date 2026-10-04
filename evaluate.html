@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Train H1 Economics evaluation: unstated assumptions, what outcomes depend on, and the strongest judgement.">
+<meta property="og:title" content="Synapse Evaluation Lab">
+<meta property="og:description" content="Train H1 Economics evaluation: unstated assumptions, what outcomes depend on, and the strongest judgement.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Synapse Evaluation Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+    <a href="data.html" data-page="data">Data</a>
+    <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+  </div>
+</nav>
+<script>
+(function(){
+  var p=document.currentScript.closest('body').querySelectorAll('[data-page]');
+  var cur=location.pathname.split('/').pop().replace('.html','');
+  if(!cur||cur==='')cur='home';
+  p.forEach(function(a){if(a.dataset.page===cur)a.classList.add('active')});
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics · AO4 Evaluation</div>
+    <h1>Evaluation Lab</h1>
+    <p class="lede">About <b>60% of H1 marks</b> also reward evaluation. This lab trains its three moves: spot the <b>unstated assumption</b>, name what the outcome <b>depends on</b>, and pick the <b>strongest judgement</b>.</p>
+  </header>
+
+  <div class="levels" id="types"><span class="lab">Practise</span></div>
+  <div class="meter"><span>Mastered</span><div class="bar"><i class="mbar"></i></div><span class="num mnum"></span></div>
+  <div class="card" id="dcard"></div>
+
+  <footer class="why">
+    <h3>How this trains the brain</h3>
+    <ul>
+      <li><b>Three moves, drilled separately.</b> Evaluation feels vague until it is broken into moves you can practise: challenge the assumption, set the condition, make the call.</li>
+      <li><b>Weak answers as distractors.</b> The wrong conclusions are the ones examiners see every year: one-sided, "it depends" with no criteria, or no context. Learning to reject them is half the skill.</li>
+      <li><b>Spacing and a confidence check.</b> Missed items return three cards later. A lucky guess is not counted as mastered.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const EVALS=[
+ // unstated assumptions
+ {t:"assume",k:"2.3",s:"\"Raising the tax on cigarettes will sharply cut smoking.\"",o:["Smokers' demand for cigarettes is price elastic.","Cigarettes create negative externalities.","The government needs more tax revenue.","Cigarettes are a normal good."],a:0,why:"A sharp fall in quantity needs demand to be price elastic. Cigarettes are addictive and demand is usually inelastic, so the claim rests on a doubtful assumption."},
+ {t:"assume",k:"2.3",s:"\"A carbon tax set at S$45 per tonne will bring emissions to the socially optimal level.\"",o:["S$45 equals the marginal external cost of emissions at the social optimum.","Firms will pass the whole tax on to consumers.","Demand for electricity is price inelastic.","All countries charge the same carbon tax."],a:0,why:"A tax reaches the social optimum only if it equals the MEC there. The MEC is very hard to measure, so the tax may be too high or too low."},
+ {t:"assume",k:"2.1",s:"\"Subsidising electric cars will quickly replace petrol cars on Singapore's roads.\"",o:["Supply of electric cars and charging points is price elastic and can expand quickly.","Electric cars are inferior goods.","Petrol prices will fall.","The COE quota will be removed."],a:0,why:"A subsidy only raises EV numbers quickly if output and the charging network can expand quickly. Supply limits, and the fixed COE quota, may slow the switch."},
+ {t:"assume",k:"2.2",s:"\"Public education about the harm of sugar will cut sugary drink consumption.\"",o:["Consumers act on the new information and change their behaviour.","Sugary drinks are public goods.","Sugar prices are rising worldwide.","Sugary drinks have positive externalities."],a:0,why:"Information only changes consumption if people act on it. Habit and taste can mean consumers know the risks but carry on."},
+ {t:"assume",k:"2.1",s:"\"A maximum price on rents will make housing more affordable for low-income families.\"",o:["Low-income families will be the ones who obtain the limited rental units.","Rental housing is a public good.","Landlords will build more homes at the lower price.","Demand for rental housing will fall."],a:0,why:"A ceiling creates a shortage. Affordability improves for low-income families only if they actually get the scarce units, which depends on how units are allocated."},
+ {t:"assume",k:"1.1",s:"\"Consumers will always choose the healthier option if it is cheaper.\"",o:["Consumers make decisions rationally, based only on price and health benefits.","Healthy food is an inferior good.","The government provides all healthy food.","Supply of healthy food is fixed."],a:0,why:"The claim assumes rational choice on price and health alone. Tastes, convenience and habits also drive choices."},
+ {t:"assume",k:"2.3",s:"\"Direct provision of public healthcare is the most efficient way to raise health standards.\"",o:["The government has enough information and resources to provide care at the right quantity and quality.","Healthcare is non-excludable.","Healthcare has no external benefits.","Private hospitals do not exist."],a:0,why:"Direct provision is efficient only if the government knows the right amount to provide and runs it well. Information gaps and high costs can lead to over- or under-provision."},
+ // it depends on
+ {t:"depends",k:"2.1",s:"Will a rise in the price of chicken raise sellers' total revenue?",o:["The price elasticity of demand for chicken","The number of chicken farms in Brazil","Whether chicken is a public good","The price of COEs"],a:0,why:"Revenue rises after a price increase only if demand is price inelastic. If demand is elastic, revenue falls."},
+ {t:"depends",k:"2.1",s:"How much will a tax on sugary drinks raise their price for consumers?",o:["The price elasticities of demand and supply","The number of Nutri-Grade labels","The colour of the bottle","The level of the carbon tax"],a:0,why:"When demand is more inelastic than supply, more of the tax is passed on to consumers as a higher price. (Tax incidence is not required at H1, but the role of elasticity is.)"},
+ {t:"depends",k:"2.3",s:"Will a ban on advertising D-grade drinks reduce consumption much?",o:["How much consumers' choices are driven by advertising compared with habit and taste","The PES of sugar","The government's budget surplus","Whether drinks are excludable"],a:0,why:"An ad ban works through information and persuasion. If consumption is driven mainly by habit and taste, the effect will be small."},
+ {t:"depends",k:"2.1",s:"Will expanding nursing places quickly end the shortage of nurses?",o:["The time lag before new students graduate and join the workforce","The price of medicine","Whether healthcare is non-rival","The CPI base year"],a:0,why:"Training takes years, so labour supply is inelastic in the short run. The shortage may persist until new nurses qualify."},
+ {t:"depends",k:"2.3",s:"Will tradeable permits cut pollution at a low cost?",o:["Whether firms' costs of cutting emissions differ, and permits are monitored and enforced","Whether pollution is a merit good","The level of household income","The price of durians"],a:0,why:"Permits save costs when firms with cheap ways to cut emissions sell permits to firms with costly ones. They also need strict monitoring to work."},
+ {t:"depends",k:"2.2",s:"Should the government provide street lighting directly?",o:["Whether the good is non-excludable and non-rivalrous, so the market will not provide it","Whether street lights are made locally","The PED for electricity","The number of car owners"],a:0,why:"Direct provision is justified when the good is a public good that the free market will not provide because of free riders."},
+ {t:"depends",k:"2.1",s:"Will a minimum wage raise the incomes of low-wage workers as a group?",o:["How price elastic firms' demand for low-wage labour is","How many public goods exist","Whether wages are nominal","The size of the carbon tax"],a:0,why:"If demand for labour is inelastic, few jobs are lost and total income rises. If it is elastic, job losses may cancel out the higher wage."},
+ // best judgement
+ {t:"judge",k:"2.3",s:"Discuss whether a carbon tax is the best way for Singapore to reduce emissions.",o:[
+   "A carbon tax is the best policy because it makes polluters pay the full social cost of emissions. Firms will face MSC instead of MPC, so output falls to where MSB = MSC and the deadweight loss disappears. This is why many economists support carbon pricing, so Singapore should rely on it.",
+   "A carbon tax is the best policy for Singapore's large emitters, since it is market-based and covers about 70% of emissions. But because the MEC is hard to measure and firms may relocate, it works best alongside regulations and support for clean technology. Its success depends on the tax rising on schedule.",
+   "A carbon tax has clear advantages, such as internalising the externality and raising revenue. It also has disadvantages, such as hurting firms' competitiveness and raising household utility bills. Therefore whether it is the best policy depends on many factors, and both sides have merit.",
+   "A carbon tax is not the best policy because firms will simply pass the higher cost on to consumers through higher electricity prices, so emissions may not fall much. Regulations that cap emissions directly would therefore be more certain, and the government should replace the tax with strict rules."],a:1,why:"The strongest judgement takes a clear stand, ties it to Singapore's context (coverage of large emitters), weighs the main limitation (the MEC is hard to measure, carbon leakage) and says what success depends on. \"It depends\" with no criteria is not a judgement."},
+ {t:"judge",k:"2.3",s:"Discuss whether Nutri-Grade labels are more effective than a sugar tax in reducing sugar consumption.",o:[
+   "Labels are better because sugar over-consumption is caused by information failure. Nutri-Grade labels give consumers clear information at the point of sale, so their perceived benefit falls to the true benefit and demand falls to the social optimum. A tax does not address the cause, so labels are clearly more effective.",
+   "A tax is better because it raises the price of sugary drinks immediately, and consumers respond to prices more than to information. Countries that taxed sugary drinks saw sales fall. Since price is what really changes behaviour, Singapore should replace labels with a sugar tax.",
+   "In the short run a tax may cut consumption more, because price changes act immediately even when habits are strong. Labels tackle the root cause, information failure, without hurting low-income consumers, and they push firms to reformulate. For Singapore, which values equity, labels plus reformulation are likely more effective over time, especially with the D-grade advertising ban.",
+   "Both policies have strengths. Labels inform consumers and a tax raises prices. Labels are cheaper for the government, while a tax raises revenue. Each also has limits, as habits are hard to change. Overall, both policies are good and the government should use both of them together."],a:2,why:"This answer compares the policies on clear criteria (speed, root cause, equity), separates the short run from the long run, and reaches a judgement for Singapore's context."},
+ {t:"judge",k:"2.1",s:"Discuss whether the COE system allocates cars fairly in Singapore.",o:[
+   "The COE system is unfair because premiums of over S$100,000 mean that only high-income households can afford cars. Lower-income families who need a car for work or caregiving are priced out, so the system worsens inequity and the government should give COEs by ballot instead.",
+   "The COE system rations cars efficiently by price and limits congestion, but it gives cars to those most able to pay, not those most in need. It is fair if the public transport alternative is affordable and good. Singapore's heavy investment in public transport partly answers the equity concern, though families with special needs may still lose out.",
+   "The COE system is fair because the price mechanism allocates COEs to those who value them most, as shown by their willingness to pay. Everyone faces the same rules in the bidding, so no one is treated differently, and the quota keeps congestion under control for all road users.",
+   "The COE system has benefits, such as controlling congestion and raising revenue, and costs, such as high prices and inequity. Premiums rose sharply after 2021, which shows the system is under strain. Overall, the government should review it because there are arguments on both sides."],a:1,why:"It separates efficiency from equity, explains the trade-off, states what fairness depends on (the quality of public transport) and reaches a qualified judgement."},
+ {t:"judge",k:"2.1",s:"Discuss whether a maximum price on essential food during a supply shock helps consumers.",o:[
+   "A maximum price helps consumers because it stops sellers from raising prices during the shock. Consumers pay less for essential food, which protects low-income households who spend a large share of income on food, so the government should cap prices whenever supply falls.",
+   "A maximum price harms consumers because at a price below equilibrium quantity demanded exceeds quantity supplied. The resulting shortage leads to queues, empty shelves and black markets, so consumers end up worse off and the government should never use price ceilings.",
+   "A maximum price lowers the price for those who buy, but at a price below equilibrium it causes a shortage, queues and possibly black markets. It helps consumers only if it is temporary and paired with rationing or stockpile releases. In a short supply shock, such as the 2022 chicken export ban, releasing stockpiles and diversifying supply is likely to help more than a price cap.",
+   "A maximum price has advantages, as it keeps food affordable, and disadvantages, as it can cause shortages and black markets. The outcome is different for different consumers. Therefore a maximum price may or may not help consumers, depending on the situation."],a:2,why:"It weighs who gains and who loses, identifies the condition under which the policy works (temporary, with rationing), and reaches a judgement in context."},
+ {t:"judge",k:"2.2",s:"Discuss whether the government should fully fund university education.",o:[
+   "Yes. University education creates positive externalities, such as a more productive workforce and more innovation, so MSB lies above MPB and the free market under-consumes it. Full funding removes the price barrier, so consumption rises to the social optimum and the deadweight loss is removed.",
+   "Education creates external benefits, so the free market under-consumes it and a subsidy is justified. But graduates also gain high private returns, so full funding may over-subsidise and burden taxpayers. Partial subsidies with bursaries for low-income students are likely the best balance of efficiency and equity, as in Singapore's current approach.",
+   "No. The government's budget is limited, and every dollar spent on universities has an opportunity cost in healthcare, defence or housing. Graduates should therefore pay their own fees, since they gain higher salaries, and the funds should go elsewhere.",
+   "Full funding has benefits, as more students can attend and society gains from a skilled workforce, and costs, as it is expensive and some students may not need help. Whether the government should fully fund university education therefore depends on its priorities."],a:1,why:"It explains the market failure, weighs it against the private benefit and the opportunity cost of public funds, and reaches a specific, balanced recommendation."},
+ {t:"judge",k:"1.1",s:"Discuss whether the government should spend more on healthcare for an ageing population.",o:[
+   "Yes. An ageing population means more people with chronic illnesses, so healthcare needs will rise sharply. Better healthcare raises the non-material standard of living of the elderly and their families, so the government must increase spending to meet this need.",
+   "The benefits are large: better health, a better quality of life and productive older workers. But with a limited budget, the opportunity cost may be lower spending on education or infrastructure. Spending more is justified if it targets preventive care, which reduces future costs, so how the money is spent matters more than how much.",
+   "No. With a limited budget, more healthcare spending means less for education, infrastructure and defence. Since these build Singapore's future growth, the opportunity cost is too high, and families should bear more of their own healthcare costs instead.",
+   "Higher healthcare spending has benefits, such as better health and longer lives, and costs, such as the opportunity cost of other spending and a higher tax burden. Both sides are important, so the government needs to weigh the benefits and the costs carefully."],a:1,why:"It uses the central economic problem (opportunity cost) and turns the evaluation into a decision rule: targeting preventive care. That is a reasoned judgement, not a list."}
+];
+
+const TYPES={all:'All',assume:'Assumptions',depends:'It depends on',judge:'Judgements'};
+const ASK={assume:'Which unstated assumption does this claim rely on?',depends:'What does the answer depend on most?',judge:'Which conclusion is the strongest judgement?'};
+EVALS.forEach((v,i)=>v.id=i);
+const KEY='synapse-econs-eval-v1';let st={box:{},ty:'all'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const MASTER=3;const pool=()=>EVALS.filter(v=>st.ty==='all'||v.t===st.ty);
+const tyEl=document.getElementById('types');
+Object.entries(TYPES).forEach(([k,n])=>{const b=document.createElement('button');b.className='lv';b.textContent=n;b.dataset.k=k;b.setAttribute('aria-pressed',st.ty===k);
+  b.onclick=()=>{st.ty=k;tyEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===k));save();meter();startDrill()};tyEl.appendChild(b)});
+function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+  document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
+let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
+function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,8);round={seen:0,first:0};firstSet=new Set();next()}
+function next(){
+  const el=document.getElementById('dcard');
+  if(!dq.length){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+    el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>right on the first try</small></div>
+      <p class="hint">${m} of ${P.length} items mastered.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
+    document.getElementById('again').onclick=startDrill;return}
+  const v=dq.shift(),opts=shuffle(v.o.map((t,j)=>({t,j})));cur={v,done:false};
+  el.innerHTML=`<div class="chips"><span class="chip">${esc(TYPES[v.t])}</span><span class="tag">${v.k}</span>${ARCH?`<span class="arch">id ${v.id} · box ${st.box[v.id]||0}</span>`:''}</div>
+    ${v.t==='judge'?`<p class="hint" style="margin:0">Question</p><p class="prompt">${esc(v.s)}</p>`:`<p class="prompt">${esc(v.s)}</p>`}
+    <p class="hint" style="margin:0">${ASK[v.t]}</p>
+    <div class="opts1">${opts.map(o=>`<button class="opt def" data-j="${o.j}">${esc(o.t)}</button>`).join('')}</div><div id="fb"></div>`;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.j));
+}
+function answer(j){
+  if(cur.done)return;cur.done=true;const v=cur.v,ok=j===v.a;
+  document.querySelectorAll('#dcard .opt').forEach(b=>{b.disabled=true;if(+b.dataset.j===v.a)b.classList.add('good');else if(+b.dataset.j===j)b.classList.add('bad')});
+  if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
+  const fb=document.getElementById('fb'),why=`<p class="meaning">${esc(v.why)}</p>`;
+  if(ok){fb.innerHTML=`<div class="fb good"><h3>Correct.</h3>${why}<p class="ask">Were you sure, or did you guess?</p><div class="row"><button class="btn primary" id="s">I was sure</button><button class="btn" id="g">I guessed</button></div></div>`;
+    document.getElementById('s').onclick=()=>{st.box[v.id]=Math.min(MASTER,(st.box[v.id]||0)+1);save();meter();next()};
+    document.getElementById('g').onclick=()=>{st.box[v.id]=Math.max(1,st.box[v.id]||0);save();meter();dq.splice(Math.min(3,dq.length),0,v);next()};document.getElementById('s').focus();}
+  else{st.box[v.id]=0;save();meter();dq.splice(Math.min(3,dq.length),0,v);
+    fb.innerHTML=`<div class="fb bad"><h3>The strongest answer is highlighted.</h3>${why}<p class="ask">This item comes back in three cards.</p><div class="row"><button class="btn primary" id="n">Next</button></div></div>`;
+    document.getElementById('n').onclick=next;document.getElementById('n').focus();}
+}
+meter();startDrill();
+
+</script>
+</body>
+</html>

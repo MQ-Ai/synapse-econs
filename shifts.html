@@ -23,6 +23,8 @@
     <a href="concepts.html" data-page="concepts">Concepts</a>
     <a href="shifts.html" data-page="shifts">Diagrams</a>
     <a href="chains.html" data-page="chains">Chains</a>
+    <a href="data.html" data-page="data">Data</a>
+    <a href="evaluate.html" data-page="evaluate">Evaluate</a>
   </div>
 </nav>
 <script>
@@ -105,9 +107,9 @@ const SCEN=[
 ];
 
 SCEN.forEach((v,i)=>{v.id=i;v.macro=v.c==='AD'||v.c==='AS'});
-const SETS={all:'All',micro:'Goods markets',labour:'Labour markets',macro:'AD/AS'};
-const inSet=(v,s)=>s==='all'||(s==='macro'?v.macro:s==='labour'?!!v.lab:(!v.macro&&!v.lab));
-const KEY='synapse-econs-shifts-v1';let st={box:{},set:'all'};
+const SETS={jc1:'JC1: all markets',micro:'Goods markets',labour:'Labour markets',macro:'AD/AS (JC2)',all:'All'};
+const inSet=(v,s)=>s==='all'||(s==='jc1'&&!v.macro)||(s!=='jc1')&&(s==='macro'?v.macro:s==='labour'?!!v.lab:(!v.macro&&!v.lab));
+const KEY='synapse-econs-shifts-v2';let st={box:{},set:'jc1'};
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const MASTER=3;const pool=()=>SCEN.filter(v=>inSet(v,st.set));

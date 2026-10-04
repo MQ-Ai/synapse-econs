@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Mini case studies with Singapore data: calculate, compare and explain, marked against mark points.">
+<meta property="og:title" content="Synapse Data Response Lab">
+<meta property="og:description" content="Mini case studies with Singapore data: calculate, compare and explain, marked against mark points.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Synapse Data Response Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+    <a href="data.html" data-page="data">Data</a>
+    <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+  </div>
+</nav>
+<script>
+(function(){
+  var p=document.currentScript.closest('body').querySelectorAll('[data-page]');
+  var cur=location.pathname.split('/').pop().replace('.html','');
+  if(!cur||cur==='')cur='home';
+  p.forEach(function(a){if(a.dataset.page===cur)a.classList.add('active')});
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics · AO2 Data response</div>
+    <h1>Data Response Lab</h1>
+    <p class="lede">About <b>16 marks in each case study</b> come from reading the data: calculate a change, compare two trends, then explain what you see with economics. Each set is a mini case with a Singapore extract and a data table (real figures, or marked as illustrative), in the exam's own format.</p>
+  </header>
+
+  <div class="levels" id="sets"><span class="lab">Case</span></div>
+  <div class="meter"><span>Best scores</span><div class="bar"><i class="mbar"></i></div><span class="num mnum"></span></div>
+  <div class="card" id="case"></div>
+
+  <footer class="why">
+    <h3>How this trains the brain</h3>
+    <ul>
+      <li><b>Write first, then check.</b> For explain questions, write your answer before the mark points appear, so you retrieve the chain rather than recognise it.</li>
+      <li><b>Mark yourself honestly.</b> Tick only the points you actually made. Matching your answer against a mark scheme is how you learn what earns marks.</li>
+      <li><b>Show your working.</b> Calculation feedback always shows the method, since the method earns the marks.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const SETS=[
+ {id:"coe",k:"2.1",title:"The price of a car licence",
+  ext:"Singapore caps its car population. Since February 2018 the growth rate for cars has been 0%, so the number of Certificates of Entitlement (COEs) available depends on how many old cars are deregistered. Deregistrations follow a cycle of roughly ten years. In 2021 demand for cars recovered after the pandemic just as fewer cars reached deregistration age. In 2026 the government noted that cheaper electric cars were adding to demand.",
+  table:{title:"Table 1: Average COE premiums (S$, rounded)",cols:["Year","Category A","Category B"],rows:[[2019,32000,38000],[2020,34000,38000],[2021,47000,62000],[2022,75000,97000],[2023,90000,130000],[2024,96000,108000],[2025,103000,122000]]},
+  chart:"line",src:"Approximate annual averages (smartcalculator.sg); MOT, May 2026",
+  qs:[
+   {t:"mcq",m:1,q:"By roughly what percentage did the average Category A premium rise between 2019 and 2025?",o:["About 70%","About 220%","About 320%","About 71,000%"],a:1,why:"(103,000 − 32,000) ÷ 32,000 × 100 ≈ 222%. Always divide the change by the starting value."},
+   {t:"mcq",m:2,q:"Which statement best compares the two categories between 2021 and 2025?",o:["Both rose every year, and Category B always rose faster.","Both rose overall; Category B rose more steeply to 2023 and then fell, while Category A kept rising.","Category A rose while Category B fell over the period.","Both fell after peaking in 2022."],a:1,why:"A good comparison states the common trend (both rose overall) and then the key difference (B peaked in 2023 and fell; A rose every year)."},
+   {t:"open",m:4,q:"Using demand and supply analysis, explain why COE premiums rose sharply between 2021 and 2023.",pts:["Demand for COEs rose (demand curve shifts right), e.g. car demand recovered after the pandemic or higher incomes.","Supply of COEs fell (supply curve shifts left) as fewer cars were deregistered and the growth rate is 0%.","Supply of COEs is fixed by quota, so supply is perfectly price-inelastic: the whole rise in demand shows up as a higher price.","Both shifts push the equilibrium premium up; reference to the rise in Table 1 (e.g. Cat B from about S$62,000 to S$130,000)."],
+    model:"Demand for COEs rose as car demand recovered after the pandemic, shifting demand right. At the same time, fewer cars reached deregistration age and the car growth rate is 0%, so the quota of COEs fell and supply shifted left. Because the quota fixes supply, it is perfectly price-inelastic, so the rise in demand and fall in supply push the premium sharply higher, as seen in Category B's rise from about S$62,000 in 2021 to S$130,000 in 2023."},
+   {t:"open",m:3,q:"Explain one reason why the government limits the number of cars through a quota instead of letting the market decide.",pts:["Car use creates negative externalities (congestion, pollution) borne by third parties.","So MSC > MPC and the free market would over-consume cars relative to the social optimum.","A quota caps the quantity near the social optimum, reducing the deadweight loss (and suits land-scarce Singapore)."],
+    model:"Driving creates external costs such as congestion and pollution for third parties, so MSC lies above MPC. A free market would produce where MPB = MPC, leading to more cars than the socially optimal level. A quota limits the number of cars directly, moving output closer to where MSB = MSC and reducing the deadweight loss, which matters especially in land-scarce Singapore."}
+  ]},
+ {id:"chicken",k:"2.1",title:"When the chicken stopped coming",
+  ext:"On 1 June 2022 Malaysia stopped exporting up to 3.6 million live chickens a month to protect its own supply. About one-third of Singapore's chicken came from Malaysia, mostly as fresh chilled chicken. Suppliers expected fresh chicken prices to rise by about S$1.20 per kg within a week. FairPrice held around four months of frozen chicken and the government encouraged consumers to switch to frozen chicken and other proteins.",
+  table:{title:"Table 2: Sources of Singapore's chicken imports, 2022 (approximate shares)",cols:["Source","Share (%)"],rows:[["Brazil",48],["Malaysia",34],["United States",8],["Others",10]]},
+  chart:"bar",src:"NZ MFAT market report, June 2022 (approximate shares)",
+  qs:[
+   {t:"mcq",m:1,q:"Using Table 2, what share of Singapore's chicken imports did NOT come from Malaysia?",o:["34%","48%","66%","90%"],a:2,why:"100% − 34% = 66%."},
+   {t:"open",m:4,q:"With the help of a diagram, explain the likely effect of the export ban on the market for fresh chicken in Singapore.",pts:["Supply of fresh chicken falls: supply curve shifts left, as about one-third of supply came from Malaysia.","At the original price there is a shortage, so price rises (Extract: about S$1.20/kg).","Quantity demanded falls along the demand curve; new equilibrium at higher price and lower quantity.","Diagram drawn correctly: S shifts left, P0 to P1 up, Q0 to Q1 down."],
+    model:"The ban removed a large source of fresh chicken, so supply fell and the supply curve shifted left. At the original price there was a shortage, which pushed the price up, by about S$1.20 per kg according to the extract. As the price rose, quantity demanded fell along the demand curve, so the new equilibrium has a higher price and a lower quantity of fresh chicken."},
+   {t:"mcq",m:2,q:"In the week after the ban, the price of fresh chicken rose by 10% and the quantity bought fell by 3%. What is the PED and what happened to consumer expenditure on fresh chicken?",o:["−3.3, elastic; expenditure fell","−0.3, inelastic; expenditure rose","−0.3, inelastic; expenditure fell","−3.3, elastic; expenditure rose"],a:1,why:"PED = %ΔQd ÷ %ΔP = −3 ÷ 10 = −0.3. Demand is price inelastic, so price rises by proportionately more than quantity falls and expenditure (P × Q) rises. (Illustrative figures.)"},
+   {t:"open",m:3,q:"Explain how the ban was likely to affect the market for frozen chicken.",pts:["Frozen chicken is a substitute for fresh chicken.","The rise in the price of fresh chicken raises demand for frozen chicken: demand curve shifts right.","Price and quantity of frozen chicken rise; the rise in price is smaller if supply is elastic, e.g. because of stockpiles."],
+    model:"Frozen chicken is a close substitute for fresh chicken. As fresh chicken became dearer, consumers switched, so demand for frozen chicken rose and its demand curve shifted right. This raises both the price and quantity of frozen chicken, although stockpiles like FairPrice's four months of supply make supply more price-elastic, which limits the price rise."}
+  ]},
+ {id:"carbon",k:"2.3",title:"Putting a price on carbon",
+  ext:"Singapore taxes facilities that emit at least 25,000 tonnes of greenhouse gases a year, about 50 facilities covering roughly 70% of national emissions. Firms may offset up to 5% of taxable emissions with eligible international carbon credits, and emissions-intensive firms that compete abroad receive transitional allowances. Households receive U-Save rebates to help with higher utility bills.",
+  table:{title:"Table 3: Singapore's carbon tax rate (S$ per tonne CO2e)",cols:["Period","Rate"],rows:[["2019–23",5],["2024–25",25],["2026–27",45],["2030 target (upper)",80]]},
+  chart:"bar",src:"National Climate Change Secretariat",
+  qs:[
+   {t:"mcq",m:1,q:"By what percentage did the carbon tax rate rise from 2024–25 to 2026–27?",o:["20%","44%","80%","180%"],a:2,why:"(45 − 25) ÷ 25 × 100 = 80%."},
+   {t:"open",m:4,q:"Explain how a carbon tax can achieve a more efficient allocation of resources.",pts:["Emissions impose external costs (MEC) on third parties, e.g. climate damage, so MSC > MPC.","The free market produces where MPB = MPC, above the social optimum: over-production and deadweight loss.","A tax per tonne equal to the MEC raises firms' private costs, shifting MPC up towards MSC (internalising the externality).","Output falls towards the social optimum where MSB = MSC, reducing the deadweight loss."],
+    model:"Emissions impose external costs on third parties, so MSC lies above MPC and a free market over-produces where MPB = MPC, causing a deadweight loss. A carbon tax set equal to the marginal external cost raises firms' private costs, shifting MPC up to MSC. Firms now face the full social cost, so output falls to where MSB = MSC and the deadweight loss is removed."},
+   {t:"open",m:3,q:"Using the extract, explain one reason why the government gives transitional allowances to some firms.",pts:["Emissions-intensive firms that sell abroad compete with firms in countries with no or lower carbon tax.","A sharp rise in costs could make them uncompetitive, so they may relocate or lose sales: carbon leakage, with no global cut in emissions.","Allowances give them time to decarbonise while protecting jobs and output in Singapore."],
+    model:"Trade-exposed, emissions-intensive firms compete with producers in countries that have lower or no carbon taxes. A large tax could make them uncompetitive, leading them to cut output or move abroad, so emissions simply shift elsewhere (carbon leakage) while Singapore loses jobs. Transitional allowances give these firms time to invest in cleaner technology."}
+  ]},
+ {id:"sugar",k:"2.3",title:"Cutting sugar: labels or a tax?",illus:true,
+  ext:"Singapore requires Nutri-Grade labels on pre-packed drinks, graded A to D by sugar and saturated fat, and bans advertising of D-grade drinks. Some countries tax sugary drinks instead. The table shows illustrative data for a market for high-sugar drinks before and after a policy change.",
+  table:{title:"Table 4: Illustrative market for high-sugar drinks",cols:["","Before","After"],rows:[["Price per bottle (S$)",2.00,2.40],["Bottles sold per week (thousands)",500,450]]},
+  chart:null,src:"Illustrative figures for practice; policy facts from HPB Nutri-Grade",
+  qs:[
+   {t:"mcq",m:2,q:"Using Table 4, calculate the PED for high-sugar drinks.",o:["−0.5","−2.0","−0.1","−5.0"],a:0,why:"%ΔQd = (450 − 500) ÷ 500 = −10%. %ΔP = (2.40 − 2.00) ÷ 2.00 = +20%. PED = −10 ÷ 20 = −0.5."},
+   {t:"mcq",m:1,q:"What happened to consumer expenditure on high-sugar drinks?",o:["Fell from S$1.0m to S$0.9m a week","Rose from S$1.0m to S$1.08m a week","Stayed at S$1.0m a week","Rose from S$0.9m to S$1.2m a week"],a:1,why:"Before: 2.00 × 500,000 = S$1.0m. After: 2.40 × 450,000 = S$1.08m. Demand is inelastic, so expenditure rose."},
+   {t:"open",m:4,q:"Explain why consumers may drink more sugary drinks than is good for them, and how Nutri-Grade labels address this.",pts:["Information failure: consumers under-estimate the long-term health costs (e.g. diabetes), so perceived MPB exceeds true MPB.","They consume more than the amount that best serves their own interest (and society bears healthcare costs).","Labels give clear, simple information at the point of sale, lowering perceived benefit / demand.","Demand shifts left towards the socially optimal level; the D-grade ad ban reduces demand further."],
+    model:"Consumers often under-estimate the long-term health costs of sugar, so the benefit they perceive is higher than the true benefit and they over-consume. Nutri-Grade labels give simple information at the point of sale, so consumers' perceived benefit falls closer to the true benefit. Demand for high-sugar drinks falls and consumption moves towards the socially optimal level."}
+  ]},
+ {id:"nurses",k:"2.1",title:"Not enough nurses",illus:true,
+  ext:"Singapore's population is ageing quickly, raising the need for healthcare. Hospitals report difficulty filling nursing posts, and many nurses leave for jobs abroad or outside healthcare. The government has expanded nursing places at polytechnics and universities, raised nurses' pay, and recruited nurses from overseas. The table shows illustrative data.",
+  table:{title:"Table 5: Illustrative data for the labour market for nurses",cols:["Year","Median monthly wage (S$)","Unfilled nursing vacancies"],rows:[[2021,3800,4200],[2022,4000,4600],[2023,4300,4400],[2024,4500,3900]]},
+  chart:"line",src:"Illustrative figures for practice",
+  qs:[
+   {t:"mcq",m:2,q:"Which statement best describes the relationship between wages and unfilled vacancies in Table 5?",o:["Wages and vacancies both rose every year.","Wages rose every year; vacancies rose until 2022 and then fell.","Vacancies fell every year as wages rose.","Wages fell while vacancies rose."],a:1,why:"State each trend precisely: wages rose every year (3,800 to 4,500); vacancies rose to a peak of 4,600 in 2022 and then fell to 3,900."},
+   {t:"open",m:4,q:"Using demand and supply analysis, explain why there was a shortage of nurses.",pts:["Demand for nurses rose as the ageing population raised demand for healthcare: derived demand, so the demand curve shifts right.","Supply did not keep up: nurses left for jobs abroad or other sectors, and training takes years (supply is price-inelastic in the short run).","At the prevailing wage, quantity of nurses demanded exceeded quantity supplied: a shortage, shown by unfilled vacancies.","Wages rise over time to clear the shortage, as Table 5 shows."],
+    model:"An ageing population raised the demand for healthcare and hence the derived demand for nurses, shifting the demand curve right. Supply did not keep pace because training takes years and some nurses left, so labour supply was price-inelastic in the short run. At the existing wage, more nurses were demanded than supplied, creating a shortage shown by the rise in unfilled vacancies to 4,600 in 2022. Wages then rose, which helped reduce vacancies."},
+   {t:"open",m:3,q:"Explain why vacancies fell after 2022 even though demand for healthcare kept rising.",pts:["Higher wages attracted more people into nursing and kept existing nurses: movement along / rise in quantity supplied.","More training places and overseas recruitment increased the supply of nurses: supply shifts right.","Supply grew faster than demand, so the shortage narrowed."],
+    model:"Rising wages raised the quantity of nurses supplied by attracting new entrants and keeping existing nurses. At the same time, more training places and overseas recruitment shifted the supply of nurses to the right. Because supply grew faster than demand after 2022, the gap between quantity demanded and supplied narrowed, so vacancies fell."}
+  ]}
+];
+
+const KEY='synapse-econs-data-v1';let st={best:{},cur:SETS[0].id};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.best)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const total=s=>s.qs.reduce((a,q)=>a+q.m,0);
+const setEl=document.getElementById('sets');
+SETS.forEach((s,i)=>{const b=document.createElement('button');b.className='lv';b.textContent=`${i+1}. ${s.title}`;b.dataset.k=s.id;b.setAttribute('aria-pressed',st.cur===s.id);
+  b.onclick=()=>{st.cur=s.id;save();setEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===s.id));render()};setEl.appendChild(b)});
+function meter(){const got=SETS.reduce((a,s)=>a+(st.best[s.id]||0),0),all=SETS.reduce((a,s)=>a+total(s),0);
+  document.querySelector('.mbar').style.width=(got/all*100)+'%';document.querySelector('.mnum').textContent=`${got} / ${all} marks`}
+const fmt=v=>typeof v==='number'&&v>=1000?v.toLocaleString('en-SG'):v;
+function chart(s){
+  const T=s.table;if(!s.chart)return'';
+  const W=340,H=190,L=46,R=10,Tp=12,B=34,pw=W-L-R,ph=H-Tp-B;
+  const series=T.cols.slice(1).map((c,j)=>({name:c,vals:T.rows.map(r=>r[j+1])}));
+  const max=Math.max(...series.flatMap(x=>x.vals))*1.1;const y=v=>Tp+ph-(v/max)*ph;
+  const cols=['var(--teal)','var(--accent)'];let g='';
+  for(let k=0;k<=4;k++){const v=max*k/4;g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-4}" y="${y(v)+3}" text-anchor="end">${v>=1000?Math.round(v/1000)+'k':Math.round(v)}</text>`}
+  const n=T.rows.length;
+  if(s.chart==='line'){const x=i=>L+pw*(i/(n-1));
+    T.rows.forEach((r,i)=>g+=`<text x="${x(i)}" y="${H-B+14}" text-anchor="middle">${r[0]}</text>`);
+    series.forEach((se,j)=>{g+=`<polyline fill="none" stroke="${cols[j]}" stroke-width="2.5" points="${se.vals.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`+se.vals.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="${cols[j]}"/>`).join('')});
+  }else{const bw=pw/n;
+    T.rows.forEach((r,i)=>{g+=`<rect x="${L+bw*i+bw*.18}" y="${y(r[1])}" width="${bw*.64}" height="${Tp+ph-y(r[1])}" rx="3" fill="var(--teal)"/><text x="${L+bw*i+bw/2}" y="${H-B+14}" text-anchor="middle">${esc(String(r[0]).slice(0,12))}</text><text x="${L+bw*i+bw/2}" y="${y(r[1])-4}" text-anchor="middle" style="fill:var(--ink)">${fmt(r[1])}</text>`})}
+  const legend=series.length>1?series.map((se,j)=>`<rect x="${L+j*120}" y="${H-12}" width="10" height="10" rx="2" fill="${cols[j]}"/><text x="${L+j*120+14}" y="${H-3}">${esc(se.name)}</text>`).join(''):'';
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(T.title)}">${g}${legend}</svg>`;
+}
+let score={};
+function render(){
+  const s=SETS.find(x=>x.id===st.cur),T=s.table;score={};
+  const el=document.getElementById('case');
+  el.innerHTML=`<div class="chips"><span class="chip">${s.k} · ${s.k[0]==='1'?'Central economic problem':'Markets'}</span>${s.illus?'<span class="chip src">Illustrative data</span>':''}${(st.best[s.id]!=null)?`<span class="chip src">Best ${st.best[s.id]} / ${total(s)}</span>`:''}${ARCH?`<span class="arch">set ${s.id}</span>`:''}</div>
+    <h2 style="font:800 24px/1.2 var(--display);margin:0">${esc(s.title)}</h2>
+    <p class="extract"><b>Extract</b>${esc(s.ext)}</p>
+    <div class="tblwrap"><table class="dt"><caption>${esc(T.title)}</caption><tr>${T.cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${T.rows.map(r=>`<tr>${r.map((v,ci)=>`<td>${esc(ci?fmt(v):v)}</td>`).join('')}</tr>`).join('')}</table></div>
+    ${chart(s)}<p class="srcnote">Source: ${esc(s.src)}</p>
+    ${s.qs.map((q,i)=>`<div class="qbox" id="q${i}"><div class="qhead"><b>(${String.fromCharCode(97+i)})</b><span>[${q.m} mark${q.m>1?'s':''}]</span></div><p class="prompt" style="font-size:17px">${esc(q.q)}</p>${q.t==='mcq'?mcqHTML(q,i):openHTML(q,i)}<div class="qfb"></div></div>`).join('')}
+    <div id="sum"></div>`;
+  s.qs.forEach((q,i)=>q.t==='mcq'?wireMcq(s,q,i):wireOpen(s,q,i));
+}
+function mcqHTML(q,i){q._o=shuffle(q.o.map((t,j)=>({t,j})));return `<div class="opts1">${q._o.map(o=>`<button class="opt def" data-j="${o.j}">${esc(o.t)}</button>`).join('')}</div>`}
+function openHTML(q,i){return `<textarea class="ans" placeholder="Write your answer here first. It stays on this page only."></textarea><div class="row"><button class="btn primary ck">Show the mark points</button></div>`}
+function wireMcq(s,q,i){const box=document.getElementById('q'+i);
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(score[i]!=null)return;const ok=+b.dataset.j===q.a;score[i]=ok?q.m:0;
+    box.querySelectorAll('.opt').forEach(c=>{c.disabled=true;if(+c.dataset.j===q.a)c.classList.add('good');else if(c===b)c.classList.add('bad')});
+    box.querySelector('.qfb').innerHTML=`<div class="fb ${ok?'good':'bad'}"><h3>${ok?'Correct.':'Not quite.'}</h3><p class="meaning">${esc(q.why)}</p></div>`;done(s)})}
+function wireOpen(s,q,i){const box=document.getElementById('q'+i);
+  box.querySelector('.ck').onclick=e=>{e.currentTarget.parentNode.remove();box.querySelector('textarea').readOnly=true;
+    const fb=box.querySelector('.qfb');
+    fb.innerHTML=`<div class="fb" style="background:var(--teal-soft)"><h3 style="color:var(--teal)">Tick each point your answer made</h3><ul class="pts">${q.pts.map((p,k)=>`<li><label><input type="checkbox" data-k="${k}">${esc(p)}</label></li>`).join('')}</ul>
+      <div class="row"><button class="btn primary sc">Score my answer</button></div></div>`;
+    fb.querySelector('.sc').onclick=()=>{const n=fb.querySelectorAll('input:checked').length;score[i]=Math.min(q.m,n);fb.querySelectorAll('input').forEach(c=>c.disabled=true);
+      fb.querySelector('.sc').parentNode.outerHTML=`<p class="ask">${score[i]} / ${q.m} marks.</p><p class="meaning"><b>Model answer.</b> ${esc(q.model)}</p>`;done(s)}}}
+function done(s){if(Object.keys(score).length<s.qs.length)return;const got=s.qs.reduce((a,q,i)=>a+score[i],0);
+  st.best[s.id]=Math.max(st.best[s.id]||0,got);save();meter();
+  const i=SETS.indexOf(s),nx=SETS[(i+1)%SETS.length];
+  document.getElementById('sum').innerHTML=`<div class="qbox"><div class="score">${got} / ${total(s)}<small>marks on this case</small></div><div class="row"><button class="btn primary" id="nx">Next case: ${esc(nx.title)}</button><button class="btn" id="re">Try this case again</button></div></div>`;
+  document.getElementById('nx').onclick=()=>{setEl.querySelector(`[data-k="${nx.id}"]`).click();scrollTo(0,0)};document.getElementById('re').onclick=()=>{render();scrollTo(0,0)}}
+meter();render();
+
+</script>
+</body>
+</html>
