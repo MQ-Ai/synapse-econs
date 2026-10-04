@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Every H1 Economics (8843) definition, drilled both ways with spaced repetition.">
+<meta property="og:title" content="Synapse Concepts Lab">
+<meta property="og:description" content="Every H1 Economics (8843) definition, drilled both ways with spaced repetition.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Synapse Concepts Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+  </div>
+</nav>
+<script>
+(function(){
+  var p=document.currentScript.closest('body').querySelectorAll('[data-page]');
+  var cur=location.pathname.split('/').pop().replace('.html','');
+  if(!cur||cur==='')cur='home';
+  p.forEach(function(a){if(a.dataset.page===cur)a.classList.add('active')});
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics · AO1 Knowledge</div>
+    <h1>Concepts Lab</h1>
+    <p class="lede">Every case study rewards exact definitions. This lab drills <b><span id="nterms"></span> H1 terms</b> across all three syllabus themes, in both directions: name the definition, and name the term from its definition.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-p="drill">Drill <small>Retrieval</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-p="list">Glossary <small>All terms</small></button>
+  </nav>
+
+  <div class="levels" id="themes"><span class="lab">Themes</span></div>
+
+  <section id="p-drill" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="row" style="justify-content:space-between">
+      <div class="seg2" role="group" aria-label="Direction"><button id="d-fwd" aria-pressed="true">Term → definition</button><button id="d-rev" aria-pressed="false">Definition → term</button></div>
+    </div>
+    <div class="meter"><span>Mastered</span><div class="bar"><i class="mbar"></i></div><span class="num mnum"></span></div>
+    <div class="card" id="dcard"></div>
+  </section>
+
+  <section id="p-list" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:8px">
+    <div class="row"><button class="btn" id="cover" aria-pressed="false">Cover the definitions</button><span class="hint">Say the definition, then tap to check.</span></div>
+    <div id="vlist"></div>
+  </section>
+
+  <footer class="why">
+    <h3>How this trains the brain</h3>
+    <ul>
+      <li><b>Both directions.</b> Term → definition builds recognition; definition → term builds the recall you need to name the concept in your own answer.</li>
+      <li><b>Near-miss choices.</b> Wrong options come from the same topic (MPC vs MSC, change in demand vs change in quantity demanded), so you must know the exact wording.</li>
+      <li><b>Spacing and a confidence check.</b> Missed terms return three cards later. A lucky guess is not counted as mastered.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const TOPICS={
+ "1.1":"Scarcity, choice and decision-making",
+ "2.1":"Price mechanism, demand and supply",
+ "2.2":"Efficiency, equity and market failure",
+ "2.3":"Microeconomic policies",
+ "3.1":"Aggregate demand and aggregate supply",
+ "3.2":"Standard of living and indicators",
+ "3.3":"Macroeconomic issues",
+ "3.4":"Macroeconomic policies"
+};
+const TERMS=[
+ // Theme 1
+ {t:"Scarcity",d:"The situation where resources are limited relative to unlimited human wants.",k:"1.1"},
+ {t:"Central economic problem",d:"How to allocate limited resources among unlimited wants: what, how and for whom to produce.",k:"1.1"},
+ {t:"Opportunity cost",d:"The value of the next best alternative forgone when a choice is made.",k:"1.1"},
+ {t:"Trade-off",d:"Giving up some of one thing in order to get more of another.",k:"1.1"},
+ {t:"Factors of production",d:"Land, labour, capital and enterprise used to produce goods and services.",k:"1.1"},
+ {t:"Production possibility curve (PPC)",d:"Shows the maximum combinations of two goods an economy can produce when all resources are fully and efficiently employed, given technology.",k:"1.1"},
+ {t:"Productive efficiency (on the PPC)",d:"Producing on the PPC, so that more of one good can only be produced by giving up some of the other.",k:"1.1"},
+ {t:"Point inside the PPC",d:"Resources are unemployed or under-utilised, so actual output is below the economy's potential.",k:"1.1"},
+ {t:"Outward shift of the PPC",d:"An increase in productive capacity from more or better resources or improved technology.",k:"1.1"},
+ {t:"Marginalist principle",d:"Carry out more of an activity as long as its marginal benefit exceeds its marginal cost; the optimum is where MB = MC.",k:"1.1"},
+ {t:"Rational decision-making",d:"Weighing benefits against costs, given constraints and information, to best achieve one's objective.",k:"1.1"},
+ {t:"Utility",d:"The satisfaction a consumer gains from consuming a good or service.",k:"1.1"},
+ {t:"Constraint",d:"A limit on an economic agent's choices, such as income, budget, time or information.",k:"1.1"},
+ {t:"Unintended consequence",d:"An outcome of a decision that was not its aim, which may be good or bad.",k:"1.1"},
+ {t:"Ceteris paribus",d:"Assuming all other factors are held constant.",k:"1.1"},
+ // Theme 2: markets
+ {t:"Price mechanism",d:"The interaction of demand and supply in free markets that sets prices, which in turn allocate scarce resources.",k:"2.1"},
+ {t:"Signalling function of price",d:"Price changes give information to buyers and sellers about where resources are wanted.",k:"2.1"},
+ {t:"Incentive function of price",d:"A higher price raises potential profit, encouraging producers to supply more.",k:"2.1"},
+ {t:"Rationing function of price",d:"A rising price limits demand so that a scarce good goes to those willing and able to pay.",k:"2.1"},
+ {t:"Demand",d:"The quantity of a good consumers are willing and able to buy at each price over a period, ceteris paribus.",k:"2.1"},
+ {t:"Law of demand",d:"Price and quantity demanded are inversely related, ceteris paribus.",k:"2.1"},
+ {t:"Change in quantity demanded",d:"A movement along the demand curve caused by a change in the good's own price.",k:"2.1"},
+ {t:"Change in demand",d:"A shift of the whole demand curve caused by a non-price determinant such as income or tastes.",k:"2.1"},
+ {t:"Supply",d:"The quantity of a good producers are willing and able to sell at each price over a period, ceteris paribus.",k:"2.1"},
+ {t:"Change in quantity supplied",d:"A movement along the supply curve caused by a change in the good's own price.",k:"2.1"},
+ {t:"Change in supply",d:"A shift of the whole supply curve caused by a non-price determinant such as costs of production.",k:"2.1"},
+ {t:"Substitutes",d:"Goods that can be used in place of each other, so a rise in the price of one raises demand for the other.",k:"2.1"},
+ {t:"Complements",d:"Goods consumed together, so a rise in the price of one reduces demand for the other.",k:"2.1"},
+ {t:"Normal good",d:"A good whose demand rises when consumers' incomes rise.",k:"2.1"},
+ {t:"Inferior good",d:"A good whose demand falls when consumers' incomes rise, as buyers switch to better alternatives.",k:"2.1"},
+ {t:"Market equilibrium",d:"The price at which quantity demanded equals quantity supplied, with no tendency to change.",k:"2.1"},
+ {t:"Shortage",d:"Quantity demanded exceeds quantity supplied at a price below equilibrium.",k:"2.1"},
+ {t:"Surplus",d:"Quantity supplied exceeds quantity demanded at a price above equilibrium.",k:"2.1"},
+ {t:"Price elasticity of demand (PED)",d:"The responsiveness of quantity demanded to a change in the good's own price, ceteris paribus.",k:"2.1"},
+ {t:"Price elastic demand",d:"|PED| > 1: quantity demanded changes by a larger proportion than price.",k:"2.1"},
+ {t:"Price inelastic demand",d:"|PED| < 1: quantity demanded changes by a smaller proportion than price.",k:"2.1"},
+ {t:"Price elasticity of supply (PES)",d:"The responsiveness of quantity supplied to a change in the good's own price, ceteris paribus.",k:"2.1"},
+ {t:"Consumer expenditure",d:"Price multiplied by quantity bought; it equals producers' total revenue.",k:"2.1"},
+ {t:"Derived demand",d:"Demand for a factor of production that arises from demand for the goods and services it helps produce.",k:"2.1"},
+ {t:"Indirect tax",d:"A tax on spending on a good that raises producers' unit costs, shifting supply left.",k:"2.1"},
+ {t:"Subsidy",d:"A payment by the government to producers that lowers unit costs, shifting supply right.",k:"2.1"},
+ {t:"Maximum price (price ceiling)",d:"A legal price set below equilibrium that sellers may not exceed, which causes a shortage.",k:"2.1"},
+ {t:"Minimum price (price floor)",d:"A legal price set above equilibrium that buyers may not pay below, which causes a surplus.",k:"2.1"},
+ {t:"Quota",d:"A legal limit on the quantity of a good that can be produced, sold or imported.",k:"2.1"},
+ // efficiency, equity, market failure
+ {t:"Allocative efficiency",d:"Output where marginal social benefit equals marginal social cost (MSB = MSC), maximising society's welfare.",k:"2.2"},
+ {t:"Social optimum",d:"The output level at which MSB = MSC.",k:"2.2"},
+ {t:"Private (market) optimum",d:"The output level a free market produces, where MPB = MPC.",k:"2.2"},
+ {t:"Deadweight loss",d:"The loss in net benefit to society when output is not at the social optimum.",k:"2.2"},
+ {t:"Equity",d:"Fairness in the distribution of essential goods and services.",k:"2.2"},
+ {t:"Market failure",d:"When the free market fails to allocate resources efficiently.",k:"2.2"},
+ {t:"Public good",d:"A good that is non-rivalrous and non-excludable, so the free market will not provide it.",k:"2.2"},
+ {t:"Non-rivalry",d:"One person's consumption does not reduce the amount available to others.",k:"2.2"},
+ {t:"Non-excludability",d:"It is impossible or too costly to stop non-payers from consuming the good.",k:"2.2"},
+ {t:"Free-rider problem",d:"People can consume without paying, so they will not reveal their willingness to pay and firms cannot profit.",k:"2.2"},
+ {t:"Externality",d:"A cost or benefit to a third party not involved in a transaction, which is not reflected in the price.",k:"2.2"},
+ {t:"Negative externality",d:"An external cost on third parties, so marginal social cost exceeds marginal private cost (MSC > MPC).",k:"2.2"},
+ {t:"Positive externality",d:"An external benefit to third parties, so marginal social benefit exceeds marginal private benefit (MSB > MPB).",k:"2.2"},
+ {t:"Marginal private benefit (MPB)",d:"The additional benefit to the consumer from consuming one more unit.",k:"2.2"},
+ {t:"Marginal private cost (MPC)",d:"The additional cost to the producer of producing one more unit.",k:"2.2"},
+ {t:"Marginal external benefit (MEB)",d:"The additional benefit to third parties from one more unit being consumed or produced.",k:"2.2"},
+ {t:"Marginal external cost (MEC)",d:"The additional cost imposed on third parties by one more unit being consumed or produced.",k:"2.2"},
+ {t:"Marginal social benefit (MSB)",d:"MPB plus MEB: the total benefit to society of one more unit.",k:"2.2"},
+ {t:"Marginal social cost (MSC)",d:"MPC plus MEC: the total cost to society of one more unit.",k:"2.2"},
+ {t:"Information failure",d:"Economic agents lack full or accurate information, so they misjudge the true benefits or costs of a choice.",k:"2.2"},
+ // micro policies
+ {t:"Tradeable permits",d:"Permits that allow a fixed total amount of pollution, which firms can buy and sell among themselves.",k:"2.3"},
+ {t:"Direct provision",d:"The government produces and supplies a good itself, funded through taxes.",k:"2.3"},
+ {t:"Joint provision",d:"The government and private firms share the provision of a good, for example with public funding and private delivery.",k:"2.3"},
+ {t:"Rules and regulations",d:"Legal requirements or bans that directly limit what consumers or producers may do.",k:"2.3"},
+ {t:"Public education",d:"Government campaigns that give people accurate information to correct information failure.",k:"2.3"},
+ // Theme 3
+ {t:"Aggregate demand (AD)",d:"Total planned spending on an economy's goods and services at each general price level: C + I + G + (X − M).",k:"3.1"},
+ {t:"Consumption (C)",d:"Spending by households on goods and services.",k:"3.1"},
+ {t:"Investment (I)",d:"Spending by firms on capital goods such as machinery and buildings.",k:"3.1"},
+ {t:"Government spending (G)",d:"Spending by the government on goods and services such as infrastructure, healthcare and defence.",k:"3.1"},
+ {t:"Net exports (X − M)",d:"Spending by foreigners on domestic goods minus domestic spending on foreign goods.",k:"3.1"},
+ {t:"Aggregate supply (AS)",d:"The total output producers are willing and able to produce at each general price level.",k:"3.1"},
+ {t:"General price level",d:"The weighted average of prices of all goods and services in an economy.",k:"3.1"},
+ {t:"Full-employment output",d:"The maximum output when all resources are fully employed: the economy's productive capacity.",k:"3.1"},
+ {t:"Equilibrium national output",d:"The output level where AD equals AS.",k:"3.1"},
+ {t:"Multiplier effect",d:"An initial rise in AD leads to a more than proportionate rise in national income.",k:"3.1"},
+ {t:"Standard of living",d:"The material and non-material well-being of the people in an economy.",k:"3.2"},
+ {t:"Material standard of living",d:"Well-being from the quantity of goods and services people can consume.",k:"3.2"},
+ {t:"Non-material standard of living",d:"Well-being from things not bought in markets, such as leisure, health, environmental quality and freedom.",k:"3.2"},
+ {t:"Gross domestic product (GDP)",d:"The total market value of all final goods and services produced within a country's borders in a period.",k:"3.2"},
+ {t:"Gross national income (GNI)",d:"The total income earned by a country's residents, at home or abroad, in a period.",k:"3.2"},
+ {t:"Nominal GDP",d:"GDP measured at current prices, not adjusted for inflation.",k:"3.2"},
+ {t:"Real GDP",d:"GDP measured at constant prices, adjusted for inflation.",k:"3.2"},
+ {t:"Real GDP per capita",d:"Real GDP divided by the population: the average real output per person.",k:"3.2"},
+ {t:"Consumer price index (CPI)",d:"An index of the average price of a fixed basket of goods and services bought by a typical household, relative to a base year.",k:"3.2"},
+ {t:"Base year",d:"The reference year for an index number, whose value is set at 100.",k:"3.2"},
+ {t:"Human Development Index (HDI)",d:"A composite indicator of life expectancy, education and GNI per capita.",k:"3.2"},
+ {t:"Lorenz curve",d:"A curve showing the cumulative share of income received by cumulative shares of the population.",k:"3.2"},
+ {t:"Gini coefficient",d:"A measure of income inequality from 0 (perfect equality) to 1 (perfect inequality).",k:"3.2"},
+ {t:"Unemployment rate",d:"The percentage of the labour force that is willing and able to work but has no job.",k:"3.2"},
+ {t:"Actual economic growth",d:"An increase in real national output, shown as a movement towards the PPC.",k:"3.3"},
+ {t:"Potential economic growth",d:"An increase in an economy's productive capacity, shown as an outward shift of the PPC.",k:"3.3"},
+ {t:"Sustainable growth",d:"Growth that meets present needs without compromising future generations' ability to meet theirs.",k:"3.3"},
+ {t:"Inclusive growth",d:"Growth whose benefits are shared widely across the population.",k:"3.3"},
+ {t:"Inflation",d:"A sustained increase in the general price level.",k:"3.3"},
+ {t:"Demand-pull inflation",d:"Inflation caused by AD rising faster than the economy's productive capacity.",k:"3.3"},
+ {t:"Cost-push inflation",d:"Inflation caused by rising costs of production, which shift AS left.",k:"3.3"},
+ {t:"Deflation",d:"A sustained fall in the general price level.",k:"3.3"},
+ {t:"Demand-deficient unemployment",d:"Unemployment caused by a fall in AD, so firms need fewer workers.",k:"3.3"},
+ {t:"Structural unemployment",d:"Unemployment from a mismatch between workers' skills or location and the jobs available, often after a change in the economy's structure.",k:"3.3"},
+ {t:"Frictional unemployment",d:"Short-term unemployment while workers move between jobs.",k:"3.3"},
+ {t:"Fiscal policy",d:"The use of government spending and taxation to influence economic activity.",k:"3.4"},
+ {t:"Expansionary fiscal policy",d:"Raising government spending or cutting taxes to increase AD.",k:"3.4"},
+ {t:"Contractionary fiscal policy",d:"Cutting government spending or raising taxes to reduce AD.",k:"3.4"},
+ {t:"Supply-side policies",d:"Policies that raise the quantity, quality or mobility of factors of production to increase productive capacity.",k:"3.4"},
+ {t:"Monetary policy",d:"The use of interest rates or the exchange rate to influence economic activity.",k:"3.4"},
+ {t:"Exchange-rate-centred monetary policy",d:"Singapore's approach: MAS manages the S$NEER within an undisclosed policy band to keep prices stable.",k:"3.4"},
+ {t:"Appreciation of the S$",d:"A rise in the S$'s value, which lowers import prices in S$ but makes exports less price-competitive.",k:"3.4"},
+ {t:"Transfer payments",d:"Payments from the government to individuals with no good or service in return, such as GST Vouchers and Workfare.",k:"3.4"},
+ {t:"Fiscal sustainability",d:"The government's ability to keep up its spending and tax policies in the long run without unsustainable debt.",k:"3.4"}
+];
+
+const THEME_NAMES={1:"Central economic problem",2:"Markets",3:"National economy"};
+TERMS.forEach((v,i)=>{v.id=i;v.th=+v.k[0]});
+document.getElementById('nterms').textContent=TERMS.length;
+const KEY='synapse-econs-concepts-v1';let st={box:{},th:[1,2,3],dir:'fwd'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const MASTER=3;const pool=()=>TERMS.filter(v=>st.th.includes(v.th));
+
+const thEl=document.getElementById('themes');
+[1,2,3].forEach(t=>{const b=document.createElement('button');b.className='lv';b.textContent=`${t} · ${THEME_NAMES[t]}`;b.setAttribute('aria-pressed',st.th.includes(t));
+  b.onclick=()=>{const on=st.th.includes(t);if(on&&st.th.length===1)return;st.th=on?st.th.filter(x=>x!==t):[...st.th,t].sort();b.setAttribute('aria-pressed',!on);save();meter();startDrill();renderList()};thEl.appendChild(b)});
+
+function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+  document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
+
+let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
+function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,10);round={seen:0,first:0};firstSet=new Set();next()}
+function distractors(v){
+  const same=shuffle(TERMS.filter(o=>o.id!==v.id&&o.k===v.k));
+  const theme=shuffle(TERMS.filter(o=>o.id!==v.id&&o.k!==v.k&&o.th===v.th));
+  return [...same.slice(0,2),...theme,...same.slice(2)].slice(0,3);
+}
+function makeQ(v){
+  const ds=distractors(v);
+  return st.dir==='fwd'
+    ?{prompt:v.t,ans:v.d,opts:shuffle([v.d,...ds.map(o=>o.d)]),hint:'Which definition is correct?',big:true}
+    :{prompt:v.d,ans:v.t,opts:shuffle([v.t,...ds.map(o=>o.t)]),hint:'Which term is being defined?',big:false};
+}
+function next(){
+  const el=document.getElementById('dcard');
+  if(!dq.length){
+    const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+    el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>right on the first try</small></div>
+      <p class="hint">${m} of ${P.length} terms mastered in the selected themes.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
+    document.getElementById('again').onclick=startDrill;return}
+  const v=dq.shift();const q=makeQ(v);cur={v,q,done:false};
+  el.innerHTML=`<div class="chips"><span class="chip">${v.k} · ${esc(TOPICS[v.k])}</span>${ARCH?`<span class="arch">id ${v.id} · box ${st.box[v.id]||0}</span>`:''}</div>
+    <p class="hint" style="margin:0">${q.hint}</p>${q.big?`<p class="term">${esc(q.prompt)}</p>`:`<p class="prompt">${esc(q.prompt)}</p>`}
+    <div class="opts4" style="grid-template-columns:1fr">${q.opts.map((o,k)=>`<button class="opt${q.big?' def':''}" data-w="${esc(o)}"><span class="n">(${k+1})</span>${esc(o)}</button>`).join('')}</div><div id="fb"></div>`;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b.dataset.w));
+}
+function answer(w){
+  if(cur.done)return;cur.done=true;const {v,q}=cur,ok=w===q.ans;
+  document.querySelectorAll('#dcard .opt').forEach(b=>{b.disabled=true;if(b.dataset.w===q.ans)b.classList.add('good');else if(b.dataset.w===w)b.classList.add('bad')});
+  if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
+  const card=`<p class="term" style="font-size:20px">${esc(v.t)}</p><p class="meaning">${esc(v.d)}</p>`;
+  const fb=document.getElementById('fb');
+  if(ok){fb.innerHTML=`<div class="fb good"><h3>Correct.</h3>${card}<p class="ask">Were you sure, or did you guess?</p><div class="row"><button class="btn primary" id="s">I was sure</button><button class="btn" id="g">I guessed</button></div></div>`;
+    document.getElementById('s').onclick=()=>{st.box[v.id]=Math.min(MASTER,(st.box[v.id]||0)+1);save();meter();next()};
+    document.getElementById('g').onclick=()=>{st.box[v.id]=Math.max(1,st.box[v.id]||0);save();meter();dq.splice(Math.min(3,dq.length),0,v);next()};document.getElementById('s').focus();}
+  else{st.box[v.id]=0;save();meter();dq.splice(Math.min(3,dq.length),0,v);
+    fb.innerHTML=`<div class="fb bad"><h3>Not quite. Here is the right pair.</h3>${card}<p class="ask">This term comes back in three cards.</p><div class="row"><button class="btn primary" id="n">Next</button></div></div>`;
+    document.getElementById('n').onclick=next;document.getElementById('n').focus();}
+}
+function setDir(d){st.dir=d;save();document.getElementById('d-fwd').setAttribute('aria-pressed',d==='fwd');document.getElementById('d-rev').setAttribute('aria-pressed',d==='rev');startDrill()}
+document.getElementById('d-fwd').onclick=()=>setDir('fwd');document.getElementById('d-rev').onclick=()=>setDir('rev');
+document.getElementById('d-fwd').setAttribute('aria-pressed',st.dir==='fwd');document.getElementById('d-rev').setAttribute('aria-pressed',st.dir==='rev');
+
+function renderList(){
+  document.getElementById('vlist').innerHTML=Object.keys(TOPICS).filter(k=>st.th.includes(+k[0])).map(k=>`<h3 class="lvhead">${k} ${esc(TOPICS[k])}<span>${TERMS.filter(v=>v.k===k).length} terms</span></h3>`+
+    TERMS.filter(v=>v.k===k).map((v,i)=>`<div class="vrow"><span class="n">${i+1}</span><span class="w">${esc(v.t)}</span><span class="d" tabindex="0">${esc(v.d)}${(st.box[v.id]||0)>=MASTER?'<small>Mastered</small>':''}</span></div>`).join('')).join('');
+  document.querySelectorAll('#vlist .d').forEach(d=>{const t=()=>d.classList.toggle('show');d.onclick=t;d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}}});
+}
+document.getElementById('cover').onclick=e=>{const on=document.body.classList.toggle('cover');e.currentTarget.setAttribute('aria-pressed',on);e.currentTarget.textContent=on?'Show all definitions':'Cover the definitions'};
+function show(p){
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.p===p));
+  ['drill','list'].forEach(x=>{const el=document.getElementById('p-'+x);el.hidden=x!==p;el.style.display=x===p?'flex':''});
+  if(p==='list')renderList();
+}
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>show(t.dataset.p));
+meter();startDrill();renderList();
+
+</script>
+</body>
+</html>

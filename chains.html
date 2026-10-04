@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Build the chain of reasoning for H1 Economics explain questions, link by link.">
+<meta property="og:title" content="Synapse Chains Lab">
+<meta property="og:description" content="Build the chain of reasoning for H1 Economics explain questions, link by link.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Synapse Chains Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+  </div>
+</nav>
+<script>
+(function(){
+  var p=document.currentScript.closest('body').querySelectorAll('[data-page]');
+  var cur=location.pathname.split('/').pop().replace('.html','');
+  if(!cur||cur==='')cur='home';
+  p.forEach(function(a){if(a.dataset.page===cur)a.classList.add('active')});
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics · AO3 Application</div>
+    <h1>Chains Lab</h1>
+    <p class="lede">Explain questions are marked on the <b>chain of reasoning</b>: each link must follow from the one before, from the cause to the final effect. Tap the links in order to build the chain, then check it.</p>
+  </header>
+
+  <div class="levels" id="themes"><span class="lab">Themes</span></div>
+  <div class="meter"><span>Mastered</span><div class="bar"><i class="mbar"></i></div><span class="num mnum"></span></div>
+  <div class="card" id="dcard"></div>
+
+  <footer class="why">
+    <h3>How this trains the brain</h3>
+    <ul>
+      <li><b>Order is the skill.</b> Students often know every point but skip a link or put the effect before the cause. Building the chain trains the sequence examiners reward.</li>
+      <li><b>Retrieval before reveal.</b> You commit to a full chain before seeing the model answer.</li>
+      <li><b>Spacing and a confidence check.</b> Chains you get wrong return three cards later. A lucky guess is not counted as mastered.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const CHAINS=[
+ {k:"2.1",q:"Explain how a higher excise duty on cigarettes affects consumer expenditure on cigarettes, given that demand is price inelastic.",x:[
+  "The tax raises each unit's cost to sellers.",
+  "Supply falls and the supply curve shifts left.",
+  "At the original price there is a shortage, so the price rises.",
+  "Quantity demanded falls along the demand curve.",
+  "As demand is price inelastic, quantity falls proportionately less than price rises, so consumer expenditure rises."]},
+ {k:"2.1",q:"Explain how the price mechanism responds to a rise in demand for electric vehicles.",x:[
+  "Demand rises and creates a shortage at the original price.",
+  "The price of EVs rises, signalling that consumers want more of them.",
+  "Higher prices raise expected profits, giving firms an incentive to produce more.",
+  "Resources move into EV production from other uses.",
+  "The higher price also rations the available EVs among buyers willing and able to pay."]},
+ {k:"2.1",q:"Explain how a maximum rent set below equilibrium affects the rental housing market.",x:[
+  "The government sets the maximum rent below the equilibrium rent.",
+  "Quantity demanded rises while quantity supplied falls.",
+  "A shortage of rental housing results.",
+  "Price can no longer ration, so units go by queues, ballots or connections.",
+  "Some low-income tenants still cannot find housing, and illegal side payments may appear."]},
+ {k:"2.1",q:"Explain how a minimum wage set above the equilibrium wage affects low-wage workers.",x:[
+  "The minimum wage is set above the equilibrium wage.",
+  "Firms demand less labour as it is now dearer.",
+  "More people want to work at the higher wage, so labour supplied rises.",
+  "A surplus of labour appears: unemployment among low-wage workers.",
+  "Workers who keep their jobs earn more, which improves equity for them."]},
+ {k:"2.2",q:"Explain why a free market over-produces goods that generate pollution.",x:[
+  "Producers decide output where MPB = MPC, ignoring third parties.",
+  "Production imposes an external cost (MEC) on third parties, such as poorer air quality.",
+  "So MSC lies above MPC.",
+  "Market output exceeds the social optimum where MSB = MSC.",
+  "Too many resources go to the good, creating a deadweight loss: market failure."]},
+ {k:"2.2",q:"Explain why a free market under-consumes education.",x:[
+  "Individuals consume education where MPB = MPC.",
+  "Education gives external benefits (MEB), such as a more productive workforce.",
+  "So MSB lies above MPB.",
+  "Market output is below the social optimum where MSB = MSC.",
+  "Too few resources go to education, creating a deadweight loss: market failure."]},
+ {k:"2.2",q:"Explain why the free market will not provide street lighting.",x:[
+  "Street lighting is non-excludable: non-payers cannot be stopped from benefiting.",
+  "Consumers free-ride and do not reveal their willingness to pay.",
+  "Firms cannot charge or make a profit from providing it.",
+  "It is also non-rivalrous, so it is efficient for all to use it once it exists.",
+  "The market fails to provide it at all, so the government provides it directly, funded by taxes."]},
+ {k:"2.2",q:"Explain why people may consume too little health screening without government help.",x:[
+  "People under-estimate the benefit of early detection: information failure.",
+  "Their perceived MPB is below the true MPB.",
+  "They consume less than the amount that best serves their own interest.",
+  "Society also loses the external benefit of a healthier workforce.",
+  "Consumption is below the social optimum, creating a deadweight loss."]},
+ {k:"2.3",q:"Explain how a per-unit tax can correct over-production of a good with a negative externality.",x:[
+  "The government sets a tax equal to the MEC at the social optimum.",
+  "Producers' costs rise, so the MPC curve shifts up to the MSC.",
+  "Producers now take the external cost into account.",
+  "Output falls to where MSB = MSC.",
+  "The deadweight loss is removed and allocative efficiency is restored."]},
+ {k:"2.3",q:"Explain how a subsidy on vaccinations moves consumption towards the social optimum.",x:[
+  "The government pays producers a subsidy for each vaccination given.",
+  "Costs of providing vaccinations fall, so supply shifts right.",
+  "The price to consumers falls.",
+  "Quantity demanded rises along the demand curve.",
+  "Consumption moves towards the social optimum, reducing the deadweight loss."]},
+ {k:"2.3",q:"Explain how tradeable permits limit carbon emissions at the lowest cost.",x:[
+  "The government caps total emissions and issues permits up to the cap.",
+  "Firms that can cut emissions cheaply do so and sell their spare permits.",
+  "Firms with high costs of cutting emissions buy permits instead.",
+  "Emissions are cut where it is cheapest to do so.",
+  "Total pollution is held at the cap, and firms have an ongoing incentive to adopt cleaner technology."]},
+ {k:"2.3",q:"Explain how public education reduces the over-consumption of sugary drinks.",x:[
+  "Consumers under-estimate the health costs of sugary drinks.",
+  "A campaign gives them accurate information on those costs.",
+  "Their perceived benefit falls closer to the true benefit.",
+  "Demand for sugary drinks falls.",
+  "Consumption moves towards the social optimum, though change may be slow."]},
+ {k:"1.1",q:"Explain the opportunity cost of higher government healthcare spending for an ageing population.",x:[
+  "The government's budget is limited: resources are scarce.",
+  "Spending more on healthcare means choosing to allocate funds there.",
+  "Less is then available for other uses such as education or defence.",
+  "The opportunity cost is the next best use of those funds that is forgone.",
+  "The government must weigh this trade-off against the benefits of better healthcare."]},
+ {k:"3.4",q:"Explain how expansionary fiscal policy can reduce demand-deficient unemployment.",x:[
+  "The government raises spending on infrastructure.",
+  "Government spending (G) rises, so AD shifts right.",
+  "Firms raise output and hire more workers to meet the extra demand.",
+  "Higher incomes raise consumption, a multiplied rise in national income.",
+  "Real output rises and demand-deficient unemployment falls."]},
+ {k:"3.3",q:"Explain how strong demand can cause demand-pull inflation.",x:[
+  "Rising consumer confidence and export demand increase spending.",
+  "AD shifts right.",
+  "The economy is near full employment, so output cannot rise much further.",
+  "Firms compete for scarce resources and raise prices.",
+  "The general price level rises: demand-pull inflation."]},
+ {k:"3.3",q:"Explain how a rise in world oil prices can cause cost-push inflation in Singapore.",x:[
+  "World oil prices rise sharply.",
+  "Firms' costs of production rise, as oil is a key input.",
+  "AS shifts left.",
+  "The general price level rises while real output falls.",
+  "This is cost-push inflation, with higher unemployment too."]},
+ {k:"3.4",q:"Explain how MAS can use the exchange rate to dampen imported inflation.",x:[
+  "MAS allows the S$NEER to appreciate at a faster rate.",
+  "Imports become cheaper in S$ terms.",
+  "Costs of imported inputs and consumer goods fall.",
+  "Cost-push pressure eases and AS is helped.",
+  "The general price level rises less: imported inflation is dampened."]},
+ {k:"3.4",q:"Explain how SkillsFuture can raise Singapore's potential growth.",x:[
+  "The government subsidises training for workers.",
+  "Workers gain new skills, raising the quality of labour.",
+  "Labour productivity rises.",
+  "Productive capacity rises, so AS shifts right.",
+  "Potential growth rises and structural unemployment falls."]},
+ {k:"3.3",q:"Explain how a global recession can raise unemployment in Singapore.",x:[
+  "Incomes in Singapore's trading partners fall.",
+  "Demand for Singapore's exports falls.",
+  "AD shifts left.",
+  "Firms cut output and need fewer workers.",
+  "Demand-deficient unemployment rises."]},
+ {k:"3.3",q:"Explain how automation can cause structural unemployment.",x:[
+  "Firms adopt technology that automates tasks such as checkout.",
+  "Demand for workers with those skills falls.",
+  "Displaced workers lack the skills new jobs require.",
+  "This occupational immobility prevents them from filling vacancies.",
+  "Unemployment persists due to the mismatch: structural unemployment."]},
+ {k:"3.2",q:"Explain how inflation can lower the material standard of living.",x:[
+  "The general price level rises faster than nominal incomes.",
+  "Real incomes fall.",
+  "Households can afford fewer goods and services.",
+  "The material standard of living falls.",
+  "Those on fixed incomes, such as retirees, are hit hardest."]},
+ {k:"3.4",q:"Explain how transfer payments can support inclusive growth.",x:[
+  "The government collects more tax from higher-income groups.",
+  "It gives transfers such as GST Vouchers and Workfare to lower-income households.",
+  "Disposable incomes of poorer households rise relative to richer ones.",
+  "The income gap narrows and the Gini coefficient falls.",
+  "The benefits of growth are shared more widely: more inclusive growth."]},
+ {k:"3.4",q:"Explain how a cut in interest rates raises output in an economy that uses interest-rate policy.",x:[
+  "The central bank lowers interest rates.",
+  "The cost of borrowing falls.",
+  "Firms invest more and households borrow to consume more.",
+  "AD shifts right.",
+  "Real output and employment rise."]},
+ {k:"3.1",q:"Explain how trade affects Singapore's standard of living through AD and AS.",x:[
+  "Strong external demand raises Singapore's exports.",
+  "Net exports rise, so AD rises.",
+  "Imports of cheaper inputs and capital goods lower firms' costs and raise capacity.",
+  "AS also rises.",
+  "Real national income per capita rises, raising the material standard of living."]}
+];
+
+const THEME_NAMES={1:"Central economic problem",2:"Markets",3:"National economy"};
+CHAINS.forEach((v,i)=>{v.id=i;v.th=+v.k[0]});
+const KEY='synapse-econs-chains-v1';let st={box:{},th:[1,2,3]};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const MASTER=3;const pool=()=>CHAINS.filter(v=>st.th.includes(v.th));
+const thEl=document.getElementById('themes');
+[1,2,3].forEach(t=>{const b=document.createElement('button');b.className='lv';b.textContent=`${t} · ${THEME_NAMES[t]}`;b.setAttribute('aria-pressed',st.th.includes(t));
+  b.onclick=()=>{const on=st.th.includes(t);if(on&&st.th.length===1)return;st.th=on?st.th.filter(x=>x!==t):[...st.th,t].sort();b.setAttribute('aria-pressed',!on);save();meter();startDrill()};thEl.appendChild(b)});
+function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+  document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
+
+let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
+function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,6);round={seen:0,first:0};firstSet=new Set();next()}
+function next(){
+  const el=document.getElementById('dcard');
+  if(!dq.length){
+    const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+    el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>chains right on the first try</small></div>
+      <p class="hint">${m} of ${P.length} chains mastered in the selected themes.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
+    document.getElementById('again').onclick=startDrill;return}
+  const v=dq.shift();let order=shuffle(v.x.map((_,i)=>i));
+  while(v.x.length>1&&order.every((o,i)=>o===i))order=shuffle(order);
+  cur={v,order,placed:[],done:false};render();
+}
+function render(){
+  const {v,order,placed,done}=cur,el=document.getElementById('dcard');
+  el.innerHTML=`<div class="chips"><span class="chip">${v.k} · ${THEME_NAMES[v.th]}</span>${ARCH?`<span class="arch">id ${v.id} · box ${st.box[v.id]||0}</span>`:''}</div>
+    <p class="prompt">${esc(v.q)}</p>
+    <p class="hint" style="margin:0">Your chain${done?'':' (tap a link to take it out)'}</p>
+    <div class="steps slots" id="slots">${placed.length?placed.map((i,p)=>`<button class="step placed${done?(i===p?' good':' bad'):''}" data-i="${i}" ${done?'disabled':''}><span class="k">${p+1}</span>${esc(v.x[i])}</button>`).join(''):'<span class="hint">Tap the first link below.</span>'}</div>
+    ${done?'':`<p class="hint" style="margin:0">Links</p><div class="steps pool">${order.map(i=>`<button class="step" data-i="${i}" ${placed.includes(i)?'disabled':''}><span class="k">·</span>${esc(v.x[i])}</button>`).join('')}</div>
+    <div class="row"><button class="btn primary" id="chk" ${placed.length<v.x.length?'disabled':''}>Check my chain</button><button class="btn ghost" id="clr">Clear</button></div>`}
+    <div id="fb"></div>`;
+  if(done)return;
+  el.querySelectorAll('.pool .step').forEach(b=>b.onclick=()=>{cur.placed.push(+b.dataset.i);render()});
+  el.querySelectorAll('#slots .step').forEach(b=>b.onclick=()=>{cur.placed=cur.placed.filter(i=>i!==+b.dataset.i);render()});
+  document.getElementById('clr').onclick=()=>{cur.placed=[];render()};
+  document.getElementById('chk').onclick=check;
+}
+function check(){
+  const {v,placed}=cur;cur.done=true;const ok=placed.every((i,p)=>i===p);render();
+  if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
+  const model=`<ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px">${v.x.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
+  const fb=document.getElementById('fb');
+  if(ok){fb.innerHTML=`<div class="fb good"><h3>Every link in order.</h3><p class="ask">Were you sure, or did you guess?</p><div class="row"><button class="btn primary" id="s">I was sure</button><button class="btn" id="g">I guessed</button></div></div>`;
+    document.getElementById('s').onclick=()=>{st.box[v.id]=Math.min(MASTER,(st.box[v.id]||0)+1);save();meter();next()};
+    document.getElementById('g').onclick=()=>{st.box[v.id]=Math.max(1,st.box[v.id]||0);save();meter();dq.splice(Math.min(3,dq.length),0,v);next()};document.getElementById('s').focus();}
+  else{st.box[v.id]=0;save();meter();dq.splice(Math.min(3,dq.length),0,v);
+    const n=placed.filter((i,p)=>i===p).length;
+    fb.innerHTML=`<div class="fb bad"><h3>${n} of ${v.x.length} links in the right place. The model chain:</h3>${model}<p class="ask">This chain comes back in three cards.</p><div class="row"><button class="btn primary" id="n">Next</button></div></div>`;
+    document.getElementById('n').onclick=next;document.getElementById('n').focus();}
+}
+meter();startDrill();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Pick the curve that shifts, then predict the new equilibrium: demand and supply, labour markets and AD/AS for H1 Economics.">
+<meta property="og:title" content="Synapse Diagrams Lab">
+<meta property="og:description" content="Pick the curve that shifts, then predict the new equilibrium: demand and supply, labour markets and AD/AS for H1 Economics.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Synapse Diagrams Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+  </div>
+</nav>
+<script>
+(function(){
+  var p=document.currentScript.closest('body').querySelectorAll('[data-page]');
+  var cur=location.pathname.split('/').pop().replace('.html','');
+  if(!cur||cur==='')cur='home';
+  p.forEach(function(a){if(a.dataset.page===cur)a.classList.add('active')});
+})();
+</script>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics · Diagrams</div>
+    <h1>Diagrams Lab</h1>
+    <p class="lede">Most explain questions start with one move: <b>which curve shifts, and which way?</b> Read each event, make the call, then predict what happens to price and quantity. The diagram draws itself once you have committed to an answer.</p>
+  </header>
+
+  <div class="levels" id="sets"><span class="lab">Practise</span></div>
+  <div class="meter"><span>Mastered</span><div class="bar"><i class="mbar"></i></div><span class="num mnum"></span></div>
+  <div class="card" id="dcard"></div>
+
+  <footer class="why">
+    <h3>How this trains the brain</h3>
+    <ul>
+      <li><b>Commit before you see.</b> You choose the shift and the outcome before any diagram appears, so you retrieve the analysis instead of recognising it.</li>
+      <li><b>Two steps, like the exam.</b> Markers want the cause (which curve, which way) and then the effect (new equilibrium). Getting step one wrong is the most common way to lose the whole chain.</li>
+      <li><b>Spacing and a confidence check.</b> Missed scenarios return three cards later. A lucky guess is not counted as mastered.</li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const SCEN=[
+ // micro: demand
+ {m:"Market for electric cars in Singapore",s:"The government doubles the number of public EV charging points.",c:"D",d:1,why:"Charging points are a complement to EVs. Easier charging raises the benefit of owning an EV, so demand rises at every price."},
+ {m:"Market for petrol cars",s:"World oil prices surge, pushing up pump prices for petrol.",c:"D",d:-1,why:"Petrol is a complement to petrol cars. Dearer petrol raises the cost of running one, so demand for petrol cars falls."},
+ {m:"Market for air travel",s:"Countries impose travel restrictions during a pandemic.",c:"D",d:-1,why:"Fewer people are able to travel, so demand for flights falls at every price."},
+ {m:"Market for bubble tea",s:"A health campaign links sugary drinks to diabetes and changes young people's tastes.",c:"D",d:-1,why:"A change in tastes and preferences against the good reduces demand."},
+ {m:"Market for HDB resale flats",s:"Household incomes in Singapore rise strongly.",c:"D",d:1,why:"Housing is a normal good, so higher income raises demand."},
+ {m:"Market for instant noodles",s:"Household incomes rise and families switch to healthier meals.",c:"D",d:-1,why:"Here instant noodles behave as an inferior good: higher income lowers demand."},
+ {m:"Market for HDB resale flats",s:"The government greatly increases the supply of new BTO flats.",c:"D",d:-1,why:"BTO flats are a substitute for resale flats. More BTO flats draw buyers away, so resale demand falls."},
+ {m:"Market for umbrellas",s:"The weather service forecasts a long, heavy monsoon season.",c:"D",d:1,why:"Expected wet weather raises the benefit of owning an umbrella, so demand rises."},
+ {m:"Market for rice",s:"Consumers expect rice prices to rise sharply next month.",c:"D",d:1,why:"Expectations of a future price rise make consumers buy more now, so current demand rises."},
+ {m:"Market for sugary drinks",s:"The government runs a public education campaign on the harm of excess sugar.",c:"D",d:-1,why:"Better information lowers consumers' perceived benefit, so demand falls. This is how public education corrects information failure."},
+ // micro: supply
+ {m:"Market for hawker meals",s:"Rental costs for hawker stalls rise sharply.",c:"S",d:-1,why:"Higher rent raises costs of production, so hawkers supply less at every price."},
+ {m:"Market for durians",s:"Durian farms in Malaysia enjoy an unusually good harvest.",c:"S",d:1,why:"Good weather raises output at every price, so supply increases."},
+ {m:"Market for coffee",s:"A severe drought hits coffee farms in Brazil.",c:"S",d:-1,why:"Poor weather destroys crops, so supply falls at every price."},
+ {m:"Market for cigarettes",s:"The government raises the excise duty on cigarettes.",c:"S",d:-1,why:"An indirect tax raises each unit's cost to sellers, so supply shifts left (upwards by the tax)."},
+ {m:"Market for solar panels",s:"New technology makes solar panels much cheaper to manufacture.",c:"S",d:1,why:"Better technology lowers unit costs, so supply increases."},
+ {m:"Market for solar panels",s:"The government pays producers a subsidy for every panel made.",c:"S",d:1,why:"A subsidy lowers producers' unit costs, so supply shifts right (downwards by the subsidy)."},
+ {m:"Market for chicken in Singapore",s:"A major exporting country bans exports of live chicken.",c:"S",d:-1,why:"Fewer chickens reach Singapore, so supply falls at every price."},
+ {m:"Market for laptops",s:"The price of computer chips, a key input, falls.",c:"S",d:1,why:"Cheaper inputs lower costs of production, so supply increases."},
+ {m:"Market for cars in Singapore",s:"LTA reduces the number of COEs issued.",c:"S",d:-1,why:"A tighter quota limits how many cars can be registered, so supply falls."},
+ // labour markets
+ {m:"Labour market for nurses",s:"Polytechnics and universities double their places for nursing courses.",c:"S",d:1,lab:true,why:"More trained nurses means a larger supply of labour. Wages fall and employment rises."},
+ {m:"Labour market for AI engineers",s:"Firms across the economy rush to adopt artificial intelligence.",c:"D",d:1,lab:true,why:"Demand for labour is derived demand. More demand for AI products raises demand for AI engineers, so wages and employment rise."},
+ {m:"Labour market for delivery riders",s:"Many more people sign up for app-based gig work.",c:"S",d:1,lab:true,why:"A larger pool of willing riders increases labour supply, so the wage falls and employment rises."},
+ {m:"Labour market for travel agents",s:"Most travellers now book flights and hotels online.",c:"D",d:-1,lab:true,why:"Demand for travel agents' services falls, so the derived demand for travel agents falls. Wages and employment fall."},
+ // macro AD
+ {m:"Singapore economy",s:"A global recession cuts demand for Singapore's exports.",c:"AD",d:-1,why:"Exports (X) fall, so AD = C + I + G + (X − M) falls. Output falls and the price level eases."},
+ {m:"Singapore economy",s:"The government brings forward spending on new MRT lines and hospitals.",c:"AD",d:1,why:"Government spending (G) rises, so AD rises, with a multiplied effect on national income."},
+ {m:"Singapore economy",s:"Consumer confidence falls sharply amid fears of job losses.",c:"AD",d:-1,why:"Households save more and spend less, so consumption (C) and AD fall."},
+ {m:"Singapore economy",s:"S$ appreciation makes Singapore's exports less price-competitive abroad.",c:"AD",d:-1,why:"Net exports (X − M) fall, so AD falls. (The cheaper imported inputs also affect AS, but the question asks about competitiveness.)"},
+ {m:"Singapore economy",s:"Global interest rates rise, raising the cost of borrowing for firms.",c:"AD",d:-1,why:"Investment (I) becomes costlier to finance, so I and AD fall."},
+ {m:"Singapore economy",s:"The government cuts the corporate income tax rate.",c:"AD",d:1,why:"Higher expected after-tax profits raise investment (I), so AD rises."},
+ {m:"Singapore economy",s:"Tourist arrivals rebound strongly after travel restrictions are lifted.",c:"AD",d:1,why:"Spending by foreign tourists counts as exports (X), so AD rises."},
+ {m:"Singapore economy",s:"The GST rate is raised and household spending falls.",c:"AD",d:-1,why:"Higher GST reduces real disposable spending power, so consumption (C) and AD fall."},
+ // macro AS
+ {m:"Singapore economy",s:"World oil prices double.",c:"AS",d:-1,why:"Oil is a key input. Higher costs of production shift AS left: cost-push inflation and lower output."},
+ {m:"Singapore economy",s:"SkillsFuture training raises labour productivity across industries.",c:"AS",d:1,why:"Better-quality labour raises productive capacity, so AS shifts right: more output at lower prices."},
+ {m:"Singapore economy",s:"Wages rise much faster than labour productivity.",c:"AS",d:-1,why:"Unit labour costs rise, so AS shifts left."},
+ {m:"Singapore economy",s:"An ageing population shrinks the labour force.",c:"AS",d:-1,why:"Fewer workers means less productive capacity, so AS shifts left."},
+ {m:"Singapore economy",s:"A fully automated mega-port at Tuas raises efficiency in logistics.",c:"AS",d:1,why:"Better technology and capital raise productive capacity, so AS shifts right."}
+];
+
+SCEN.forEach((v,i)=>{v.id=i;v.macro=v.c==='AD'||v.c==='AS'});
+const SETS={all:'All',micro:'Goods markets',labour:'Labour markets',macro:'AD/AS'};
+const inSet=(v,s)=>s==='all'||(s==='macro'?v.macro:s==='labour'?!!v.lab:(!v.macro&&!v.lab));
+const KEY='synapse-econs-shifts-v1';let st={box:{},set:'all'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.box)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const MASTER=3;const pool=()=>SCEN.filter(v=>inSet(v,st.set));
+const setEl=document.getElementById('sets');
+Object.entries(SETS).forEach(([k,n])=>{const b=document.createElement('button');b.className='lv';b.textContent=n;b.dataset.k=k;b.setAttribute('aria-pressed',st.set===k);
+  b.onclick=()=>{st.set=k;setEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===k));save();meter();startDrill()};setEl.appendChild(b)});
+function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+  document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
+
+const labels=v=>v.macro?{D:'AD',S:'AS',P:'General price level',Q:'Real output',p:'GPL',q:'Y'}:v.lab?{D:'DL',S:'SL',P:'Wage',Q:'Employment',p:'W',q:'L'}:{D:'D',S:'S',P:'Price',Q:'Quantity',p:'P',q:'Q'};
+const curveOf=v=>v.macro?(v.c==='AD'?'D':'S'):v.c;
+function outcome(v){const c=curveOf(v);return c==='D'?{p:v.d,q:v.d}:{p:-v.d,q:v.d}}
+function shiftOpts(v){const L=labels(v);return [['D',1],['D',-1],['S',1],['S',-1]].map(([c,d])=>({key:c+d,text:`${L[c]} shifts ${d>0?'right':'left'}`,c,d}))}
+function effOpts(v){const L=labels(v);const ar=x=>x>0?'rises':'falls';return [[1,1],[1,-1],[-1,1],[-1,-1]].map(([p,q])=>({key:p+','+q,text:`${L.P} ${ar(p)}, ${L.Q.toLowerCase()} ${ar(q)}`,p,q}))}
+
+function diagram(v){
+  const L=labels(v),c=curveOf(v),dx=50*v.d,b=160/220;
+  const D=(x,s)=>40+(x-60-s)*b, S=(x,s)=>200-(x-60-s)*b;
+  const eq=(sd,ss)=>{const x=(200+60*b+ss*b-40+60*b+sd*b)/(2*b);return [x,D(x,sd)]};
+  const e0=eq(0,0),e1=c==='D'?eq(dx,0):eq(0,dx);
+  const seg=(f,s)=>{let pts=[];for(let x=50;x<=300;x+=0.5){const y=f(x,s);if(y>=22&&y<=200)pts.push([x,y])}return [pts[0],pts[pts.length-1]]};
+  const line=(f,s,cls)=>{const [a,z]=seg(f,s);return `<line x1="${a[0]}" y1="${a[1]}" x2="${z[0]}" y2="${z[1]}" ${cls}/>`};
+  const base='stroke="var(--ink)" stroke-width="2"',sh='stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 4"';
+  const guide=([x,y],col)=>`<line x1="40" y1="${y}" x2="${x}" y2="${y}" stroke="${col}" stroke-dasharray="2 3"/><line x1="${x}" y1="${y}" x2="${x}" y2="215" stroke="${col}" stroke-dasharray="2 3"/><circle cx="${x}" cy="${y}" r="3.5" fill="${col}"/>`;
+  const endD=seg(c==='D'?D:S,dx)[1];
+  return `<svg class="diagram" viewBox="0 0 340 250" role="img" aria-label="${L[c]} shifts ${v.d>0?'right':'left'}">
+  <line x1="40" y1="15" x2="40" y2="215" stroke="var(--muted)"/><line x1="40" y1="215" x2="315" y2="215" stroke="var(--muted)"/>
+  <text x="44" y="14">${L.P}</text><text x="320" y="247" text-anchor="end">${L.Q}</text>
+  ${line(D,0,base)}${line(S,0,base)}${c==='D'?line(D,dx,sh):line(S,dx,sh)}
+  <text x="${seg(D,0)[1][0]+4}" y="${seg(D,0)[1][1]+4}" style="fill:var(--ink)">${L.D}${c==='D'?'₀':''}</text><text x="${seg(S,0)[1][0]+4}" y="${seg(S,0)[1][1]+4}" style="fill:var(--ink)">${L.S}${c==='S'?'₀':''}</text>
+  <text x="${endD[0]+4}" y="${endD[1]+(c==='D'?14:-4)}" style="fill:var(--accent)">${L[c]}₁</text>
+  ${guide(e0,'var(--muted)')}${guide(e1,'var(--accent)')}
+  <text x="36" y="${e0[1]+4}" text-anchor="end">${L.p}₀</text><text x="36" y="${e1[1]+4}" text-anchor="end" style="fill:var(--accent)">${L.p}₁</text>
+  <text x="${e0[0]}" y="228" text-anchor="middle">${L.q}₀</text><text x="${e1[0]}" y="242" text-anchor="middle" style="fill:var(--accent)">${L.q}₁</text>
+  </svg>`;
+}
+
+let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
+function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,8);round={seen:0,first:0};firstSet=new Set();next()}
+function next(){
+  const el=document.getElementById('dcard');
+  if(!dq.length){
+    const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+    el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>fully right on the first try</small></div>
+      <p class="hint">${m} of ${P.length} scenarios mastered.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
+    document.getElementById('again').onclick=startDrill;return}
+  const v=dq.shift();cur={v,step:1,ok1:false};
+  el.innerHTML=`<div class="chips"><span class="chip">${esc(v.m)}</span>${ARCH?`<span class="arch">id ${v.id} · box ${st.box[v.id]||0}</span>`:''}</div>
+    <p class="prompt">${esc(v.s)}</p><p class="hint" style="margin:0">Step 1. Which curve shifts, and which way?</p>
+    <div class="opts4" id="o1">${shiftOpts(v).map(o=>`<button class="opt def" data-k="${o.key}">${esc(o.text)}</button>`).join('')}</div><div id="s2"></div><div id="fb"></div>`;
+  el.querySelectorAll('#o1 .opt').forEach(b=>b.onclick=()=>step1(b.dataset.k));
+}
+function step1(k){
+  const v=cur.v,right=curveOf(v)+v.d;cur.ok1=k===right;
+  document.querySelectorAll('#o1 .opt').forEach(b=>{b.disabled=true;if(b.dataset.k===right)b.classList.add('good');else if(b.dataset.k===k)b.classList.add('bad')});
+  const s2=document.getElementById('s2');
+  s2.innerHTML=`<p class="hint" style="margin:0 0 10px">${cur.ok1?'Right.':'Not quite: the correct shift is highlighted.'} Step 2. What happens at the new equilibrium?</p>
+    <div class="opts4" id="o2">${effOpts(v).map(o=>`<button class="opt def" data-k="${o.key}">${esc(o.text)}</button>`).join('')}</div>`;
+  s2.querySelectorAll('.opt').forEach(b=>b.onclick=()=>step2(b.dataset.k));
+}
+function step2(k){
+  const v=cur.v,o=outcome(v),right=o.p+','+o.q,ok=cur.ok1&&k===right;
+  document.querySelectorAll('#o2 .opt').forEach(b=>{b.disabled=true;if(b.dataset.k===right)b.classList.add('good');else if(b.dataset.k===k)b.classList.add('bad')});
+  if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
+  const body=`${diagram(v)}<p class="meaning">${esc(v.why)}</p>`;
+  const fb=document.getElementById('fb');
+  if(ok){fb.innerHTML=`<div class="fb good"><h3>Both steps correct.</h3>${body}<p class="ask">Were you sure, or did you guess?</p><div class="row"><button class="btn primary" id="s">I was sure</button><button class="btn" id="g">I guessed</button></div></div>`;
+    document.getElementById('s').onclick=()=>{st.box[v.id]=Math.min(MASTER,(st.box[v.id]||0)+1);save();meter();next()};
+    document.getElementById('g').onclick=()=>{st.box[v.id]=Math.max(1,st.box[v.id]||0);save();meter();dq.splice(Math.min(3,dq.length),0,v);next()};document.getElementById('s').focus();}
+  else{st.box[v.id]=0;save();meter();dq.splice(Math.min(3,dq.length),0,v);
+    fb.innerHTML=`<div class="fb bad"><h3>Here is the full analysis.</h3>${body}<p class="ask">This scenario comes back in three cards.</p><div class="row"><button class="btn primary" id="n">Next</button></div></div>`;
+    document.getElementById('n').onclick=next;document.getElementById('n').focus();}
+}
+meter();startDrill();
+
+</script>
+</body>
+</html>
