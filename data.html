@@ -174,12 +174,14 @@ function wireOpen(s,q,i){const box=document.getElementById('q'+i);
     fb.querySelector('.sc').onclick=()=>{const n=fb.querySelectorAll('input:checked').length;score[i]=Math.min(q.m,n);fb.querySelectorAll('input').forEach(c=>c.disabled=true);
       fb.querySelector('.sc').parentNode.outerHTML=`<p class="ask">${score[i]} / ${q.m} marks.</p><p class="meaning"><b>Model answer.</b> ${esc(q.model)}</p>`;done(s)}}}
 function done(s){if(Object.keys(score).length<s.qs.length)return;const got=s.qs.reduce((a,q,i)=>a+score[i],0);
-  st.best[s.id]=Math.max(st.best[s.id]||0,got);save();meter();
+  st.best[s.id]=Math.max(st.best[s.id]||0,got);save();meter();window.synTrack&&synTrack('case',{lab:'data',set:s.id,score:got,of:total(s)});
   const i=SETS.indexOf(s),nx=SETS[(i+1)%SETS.length];
   document.getElementById('sum').innerHTML=`<div class="qbox"><div class="score">${got} / ${total(s)}<small>marks on this case</small></div><div class="row"><button class="btn primary" id="nx">Next case: ${esc(nx.title)}</button><button class="btn" id="re">Try this case again</button></div></div>`;
   document.getElementById('nx').onclick=()=>{setEl.querySelector(`[data-k="${nx.id}"]`).click();scrollTo(0,0)};document.getElementById('re').onclick=()=>{render();scrollTo(0,0)}}
 meter();render();
 
 </script>
+<script src="assets/config.js"></script>
+<script src="assets/track.js" defer></script>
 </body>
 </html>

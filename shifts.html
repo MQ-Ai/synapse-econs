@@ -151,7 +151,7 @@ let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
 function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,8);round={seen:0,first:0};firstSet=new Set();next()}
 function next(){
   const el=document.getElementById('dcard');
-  if(!dq.length){
+  if(!dq.length){window.synTrack&&synTrack('round',{lab:'shifts',score:round.first,of:round.seen});
     const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
     el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>fully right on the first try</small></div>
       <p class="hint">${m} of ${P.length} scenarios mastered.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
@@ -186,5 +186,7 @@ function step2(k){
 meter();startDrill();
 
 </script>
+<script src="assets/config.js"></script>
+<script src="assets/track.js" defer></script>
 </body>
 </html>

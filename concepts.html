@@ -240,7 +240,7 @@ function makeQ(v){
 }
 function next(){
   const el=document.getElementById('dcard');
-  if(!dq.length){
+  if(!dq.length){window.synTrack&&synTrack('round',{lab:'concepts',score:round.first,of:round.seen});
     const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
     el.innerHTML=`<div class="chips"><span class="chip">Round complete</span></div><div class="score">${round.first} / ${round.seen}<small>right on the first try</small></div>
       <p class="hint">${m} of ${P.length} terms mastered in the selected themes.</p><div class="row"><button class="btn primary" id="again">Next round</button></div>`;
@@ -283,5 +283,7 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>show(t.dataset.p));
 meter();startDrill();renderList();
 
 </script>
+<script src="assets/config.js"></script>
+<script src="assets/track.js" defer></script>
 </body>
 </html>

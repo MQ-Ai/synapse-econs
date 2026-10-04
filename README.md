@@ -28,3 +28,11 @@ python3 -m http.server 8000
 ## JC1 / JC2
 
 The labs open on JC1 topics (Theme 1 and Theme 2: scarcity, markets, market failure and micro policies). Theme 3 (macroeconomics) is treated as JC2 and can be switched on in the Concepts, Diagrams and Chains labs. The Data Response and Evaluation labs currently hold JC1 items only.
+
+## Sign-up and usage tracking
+
+Students are asked once for their name, school, level and email, with a consent tick box (PDPA). With their consent the app records page views, finished rounds and finished cases against a random id. Skipping works: nothing is sent and the labs behave exactly as before. Progress is still saved on the device.
+
+- `assets/track.js` is the form and sender, `assets/config.js` holds the settings. Leave `endpoint` empty to switch it all off.
+- `docs/tracking/apps-script.gs` is the receiver. It runs in a Google Sheet owned by the site owner and writes to the `Signups`, `Events` and `Withdrawals` tabs. It can only add rows, so nothing can be read back through the public URL.
+- Setup steps are in `docs/tracking/SETUP.md`.
