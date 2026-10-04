@@ -1,12 +1,13 @@
 /* Synapse Econs: optional sign-up and usage tracking.
    Dormant until assets/config.js sets an endpoint. Nothing is sent unless the
-   student has signed up and ticked the consent box. */
+   student has signed up. The first question on the site is free; trying to answer
+   a second one opens the sign-up form, which cannot be dismissed. */
 (function () {
   'use strict';
   var CFG = window.SYNAPSE_TRACK || {};
   var EP = CFG.endpoint || '';
-  var PK = 'synapse-econs-profile-v1', SK = 'synapse-econs-skip-v1', QK = 'synapse-econs-queue-v1';
-  var CONSENT_VERSION = 1, SKIP_DAYS = 7, QUEUE_MAX = 200;
+  var PK = 'synapse-econs-profile-v1', QK = 'synapse-econs-queue-v1';
+  var QUEUE_MAX = 200, FK = 'synapse-econs-free-v1', pending = null, ovMode = '';
 
   function get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
   function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -52,6 +53,7 @@
   }
   window.synTrack = function (event, data) { try { send(event, data); } catch (e) {} };
   window.addEventListener('online', flush);
+  window.synAllow = function () { return true; }; /* replaced below once tracking is configured */
 
   if (!EP) return; /* dormant: no form, no nav link, no sending */
 
@@ -65,8 +67,6 @@
     '#syn-card p{margin:0 0 12px;font-size:14px;line-height:1.5;color:var(--c-mut)}' +
     '#syn-card label.f{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}' +
     '#syn-card input[type=text],#syn-card input[type=email],#syn-card select{width:100%;box-sizing:border-box;font:16px Inter,system-ui,sans-serif;padding:10px 12px;border-radius:10px;border:1px solid var(--c-line);background:transparent;color:var(--c-ink)}' +
-    '#syn-card .consent{display:flex;gap:10px;align-items:flex-start;margin:14px 0 4px;font-size:13px;line-height:1.5;color:var(--c-ink)}' +
-    '#syn-card .consent input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--c-acc)}' +
     '#syn-card .small{font-size:12px;color:var(--c-mut);margin:10px 0 0}' +
     '#syn-card .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}' +
     '#syn-card button{font:600 15px Catamaran,Inter,system-ui,sans-serif;padding:10px 18px;border-radius:10px;border:1px solid var(--c-line);background:transparent;color:var(--c-ink);cursor:pointer}' +
@@ -86,7 +86,7 @@
   }
   function onKey(e) {
     if (!overlay) return;
-    if (e.key === 'Escape') { e.preventDefault(); skip(); return; }
+    if (e.key === 'Escape') { e.preventDefault(); if (ovMode !== 'gate') close(); return; }
     if (e.key !== 'Tab') return;
     var f = overlay.querySelectorAll('input,select,button,a[href]');
     if (!f.length) return;
@@ -94,38 +94,36 @@
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
-  function skip() { if (!profile) set(SK, Date.now()); close(); }
 
   function open(mode) {
     if (overlay) return;
-    lastFocus = document.activeElement;
-    var edit = mode === 'edit' && profile;
+    lastFocus = document.activeElement; ovMode = mode;
+    var edit = mode === 'edit' && profile, gate = mode === 'gate';
     overlay = document.createElement('div'); overlay.id = 'syn-ov';
     overlay.innerHTML =
       '<form id="syn-card" role="dialog" aria-modal="true" aria-labelledby="syn-h" novalidate>' +
-      '<h2 id="syn-h">' + (edit ? 'Your details' : 'Welcome to Synapse Econs') + '</h2>' +
+      '<h2 id="syn-h">' + (edit ? 'Your details' : gate ? 'Sign up to keep going' : 'Welcome to Synapse Econs') + '</h2>' +
       '<p>' + (edit ? 'You can update or delete the details we hold about you.' :
-        'Sign up so your teacher can see how the labs are being used. It takes 30 seconds, and the labs work without it.') + '</p>' +
+        gate ? 'Your first question was free. Enter your details to keep practising. It takes 30 seconds.' : 'Enter your details to start. It takes 30 seconds.') + '</p>' +
       '<label class="f" for="syn-name">Name</label><input id="syn-name" type="text" autocomplete="name" maxlength="80" required>' +
       '<label class="f" for="syn-school">School</label><input id="syn-school" type="text" autocomplete="organization" maxlength="80" required>' +
       '<label class="f" for="syn-level">Level</label><select id="syn-level" required><option value="">Choose…</option><option>JC1</option><option>JC2</option><option>Other</option></select>' +
       '<label class="f" for="syn-email">Email</label><input id="syn-email" type="email" autocomplete="email" maxlength="120" required>' +
-      '<label class="consent"><input id="syn-ok" type="checkbox"><span>I agree that Synapse Econs may collect my name, school, level and email, and record which labs I use and my scores, so my teacher can see how the app is used and help me. This is kept private and is never shared or sold. I am 13 or older, or my parent or guardian has agreed.</span></label>' +
-      '<p class="small">You can see, change or delete your details any time from the last link in the menu bar (it shows your first name)' + (CFG.contact ? ' or by emailing ' + CFG.contact.replace(/[<>&"]/g, '') : '') + '.</p>' +
+      '<p class="small">We use your details to see who is using Synapse Econs and how, and keep them private. You can see, change or delete them from the last link in the menu bar (it shows your first name)' + (CFG.contact ? ', or email ' + CFG.contact.replace(/[<>&"]/g, '') : '') + '.</p>' +
       '<div id="syn-err" role="alert"></div>' +
-      '<div class="row"><button type="submit" class="p">' + (edit ? 'Save' : 'Sign up') + '</button>' +
-      '<button type="button" id="syn-skip">' + (edit ? 'Close' : 'Skip for now') + '</button>' +
+      '<div class="row"><button type="submit" class="p">' + (edit ? 'Save' : 'Start') + '</button>' +
+      (gate ? '' : '<button type="button" id="syn-skip">Close</button>') +
       (edit ? '<button type="button" class="d" id="syn-del">Delete my details</button>' : '') + '</div></form>';
     document.body.appendChild(overlay);
     document.addEventListener('keydown', onKey, true);
     var $ = function (id) { return overlay.querySelector('#' + id); };
-    if (edit) { $('syn-name').value = profile.name; $('syn-school').value = profile.school; $('syn-level').value = profile.level; $('syn-email').value = profile.email; $('syn-ok').checked = true; }
-    $('syn-skip').onclick = skip;
+    if (edit) { $('syn-name').value = profile.name; $('syn-school').value = profile.school; $('syn-level').value = profile.level; $('syn-email').value = profile.email; }
+    if (!gate) $('syn-skip').onclick = close;
     if (edit) $('syn-del').onclick = function () {
       if (!window.confirm('Delete your details? Your lab progress on this device stays.')) return;
       var id = profile.uid;
       profile = { uid: id }; send('withdraw', {}); profile = null;
-      del(PK); set(SK, Date.now()); label(); close();
+      del(PK); label(); close();
     };
     overlay.querySelector('form').onsubmit = function (ev) {
       ev.preventDefault();
@@ -135,13 +133,13 @@
       else if (!v.school) err = 'Please enter your school.';
       else if (!v.level) err = 'Please choose your level.';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) err = 'Please enter a valid email address.';
-      else if (!$('syn-ok').checked) err = 'Please tick the box to agree, or choose Skip for now.';
       if (err) { $('syn-err').textContent = err; return; }
-      profile = { uid: (profile && profile.uid) || uid(), name: v.name, school: v.school, level: v.level, email: v.email, consent_at: new Date().toISOString(), consent_v: CONSENT_VERSION };
-      set(PK, profile); del(SK);
-      send('signup', {}, { name: v.name, school: v.school, level: v.level, email: v.email, consent_at: profile.consent_at, consent_v: CONSENT_VERSION });
+      profile = { uid: (profile && profile.uid) || uid(), name: v.name, school: v.school, level: v.level, email: v.email, signed_up_at: (profile && profile.signed_up_at) || new Date().toISOString() };
+      set(PK, profile);
+      send('signup', {}, { name: v.name, school: v.school, level: v.level, email: v.email, signed_up_at: profile.signed_up_at });
       send('view', {});
       label(); close();
+      if (pending) { var f = pending; pending = null; setTimeout(f, 60); }
     };
     setTimeout(function () { var f = $('syn-name'); if (f) f.focus(); }, 0);
   }
@@ -157,10 +155,15 @@
       links.appendChild(navLink); label();
     }
     if (profile) { send('view', {}); flush(); }
-    else {
-      var s = get(SK);
-      if (!s || Date.now() - s > SKIP_DAYS * 864e5) setTimeout(function () { open('new'); }, 500);
-    }
   }
+  /* first question free: let one question key through, then ask for sign-up */
+  window.synAllow = function (key, resume) {
+    if (profile) return true;
+    var free = get(FK) || [];
+    if (free.indexOf(key) > -1) return true;
+    if (free.length < 1) { free.push(key); set(FK, free); return true; }
+    pending = resume || null; open('gate');
+    return false;
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

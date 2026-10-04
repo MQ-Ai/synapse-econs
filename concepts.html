@@ -252,7 +252,7 @@ function next(){
   el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b.dataset.w));
 }
 function answer(w){
-  if(cur.done)return;cur.done=true;const {v,q}=cur,ok=w===q.ans;
+  if(cur.done)return;if(window.synAllow&&!synAllow('concepts:'+cur.v.id,()=>answer(w)))return;cur.done=true;const {v,q}=cur,ok=w===q.ans;
   document.querySelectorAll('#dcard .opt').forEach(b=>{b.disabled=true;if(b.dataset.w===q.ans)b.classList.add('good');else if(b.dataset.w===w)b.classList.add('bad')});
   if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
   const card=`<p class="term" style="font-size:20px">${esc(v.t)}</p><p class="meaning">${esc(v.d)}</p>`;

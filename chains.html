@@ -245,7 +245,7 @@ function render(){
     <div class="row"><button class="btn primary" id="chk" ${placed.length<v.x.length?'disabled':''}>Check my chain</button><button class="btn ghost" id="clr">Clear</button></div>`}
     <div id="fb"></div>`;
   if(done)return;
-  el.querySelectorAll('.pool .step').forEach(b=>b.onclick=()=>{cur.placed.push(+b.dataset.i);render()});
+  el.querySelectorAll('.pool .step').forEach(b=>b.onclick=()=>{if(window.synAllow&&!synAllow('chains:'+cur.v.id,()=>b.click()))return;cur.placed.push(+b.dataset.i);render()});
   el.querySelectorAll('#slots .step').forEach(b=>b.onclick=()=>{cur.placed=cur.placed.filter(i=>i!==+b.dataset.i);render()});
   document.getElementById('clr').onclick=()=>{cur.placed=[];render()};
   document.getElementById('chk').onclick=check;

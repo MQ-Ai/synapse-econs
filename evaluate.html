@@ -140,7 +140,7 @@ function next(){
   el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.j));
 }
 function answer(j){
-  if(cur.done)return;cur.done=true;const v=cur.v,ok=j===v.a;
+  if(cur.done)return;if(window.synAllow&&!synAllow('evaluate:'+cur.v.id,()=>answer(j)))return;cur.done=true;const v=cur.v,ok=j===v.a;
   document.querySelectorAll('#dcard .opt').forEach(b=>{b.disabled=true;if(+b.dataset.j===v.a)b.classList.add('good');else if(+b.dataset.j===j)b.classList.add('bad')});
   if(!firstSet.has(v.id)){firstSet.add(v.id);round.seen++;if(ok)round.first++}
   const fb=document.getElementById('fb'),why=`<p class="meaning">${esc(v.why)}</p>`;

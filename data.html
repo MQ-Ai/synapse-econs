@@ -163,10 +163,12 @@ function render(){
 function mcqHTML(q,i){q._o=shuffle(q.o.map((t,j)=>({t,j})));return `<div class="opts1">${q._o.map(o=>`<button class="opt def" data-j="${o.j}">${esc(o.t)}</button>`).join('')}</div>`}
 function openHTML(q,i){return `<textarea class="ans" placeholder="Write your answer here first. It stays on this page only."></textarea><div class="row"><button class="btn primary ck">Show the mark points</button></div>`}
 function wireMcq(s,q,i){const box=document.getElementById('q'+i);
-  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(score[i]!=null)return;const ok=+b.dataset.j===q.a;score[i]=ok?q.m:0;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(score[i]!=null)return;if(window.synAllow&&!synAllow('data:'+s.id+':'+i,()=>b.click()))return;const ok=+b.dataset.j===q.a;score[i]=ok?q.m:0;
     box.querySelectorAll('.opt').forEach(c=>{c.disabled=true;if(+c.dataset.j===q.a)c.classList.add('good');else if(c===b)c.classList.add('bad')});
     box.querySelector('.qfb').innerHTML=`<div class="fb ${ok?'good':'bad'}"><h3>${ok?'Correct.':'Not quite.'}</h3><p class="meaning">${esc(q.why)}</p></div>`;done(s)})}
 function wireOpen(s,q,i){const box=document.getElementById('q'+i);
+  const ta=box.querySelector('textarea'),gk='data:'+s.id+':'+i;
+  ta.addEventListener('focus',()=>{if(window.synAllow&&!synAllow(gk,()=>ta.focus()))ta.blur()});
   box.querySelector('.ck').onclick=e=>{e.currentTarget.parentNode.remove();box.querySelector('textarea').readOnly=true;
     const fb=box.querySelector('.qfb');
     fb.innerHTML=`<div class="fb" style="background:var(--teal-soft)"><h3 style="color:var(--teal)">Tick each point your answer made</h3><ul class="pts">${q.pts.map((p,k)=>`<li><label><input type="checkbox" data-k="${k}">${esc(p)}</label></li>`).join('')}</ul>

@@ -31,8 +31,9 @@ The labs open on JC1 topics (Theme 1 and Theme 2: scarcity, markets, market fail
 
 ## Sign-up and usage tracking
 
-Students are asked once for their name, school, level and email, with a consent tick box (PDPA). With their consent the app records page views, finished rounds and finished cases against a random id. Skipping works: nothing is sent and the labs behave exactly as before. Progress is still saved on the device.
+The first question a student answers on the site is free. Trying to answer a second one opens a sign-up form (name, school, level, email) that cannot be dismissed, and the blocked answer carries on once they have signed up. After sign-up the app records page views, finished rounds and finished cases against a random id. Progress is still saved on the device.
 
-- `assets/track.js` is the form and sender, `assets/config.js` holds the settings. Leave `endpoint` empty to switch it all off.
+- `assets/track.js` is the form, the gate and the sender; `assets/config.js` holds the settings. Leave `endpoint` empty to switch it all off (no gate, no form).
 - `docs/tracking/apps-script.gs` is the receiver. It runs in a Google Sheet owned by the site owner and writes to the `Signups`, `Events` and `Withdrawals` tabs. It can only add rows, so nothing can be read back through the public URL.
 - Setup steps are in `docs/tracking/SETUP.md`.
+- Labs call `synAllow(key, resume)` before accepting an answer; `key` identifies the question so the free one stays free.
