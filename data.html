@@ -61,7 +61,7 @@
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
-const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const ARCH=(()=>{try{return new URLSearchParams(location.search).get('view')==='architect'||localStorage.getItem('synapse-architect')==='1'}catch(e){return false}})();
 const SETS=[
  {id:"coe",k:"2.1",title:"The price of a car licence",
   ext:"Singapore caps its car population. Since February 2018 the growth rate for cars has been 0%, so the number of Certificates of Entitlement (COEs) available depends on how many old cars are deregistered. Deregistrations follow a cycle of roughly ten years. In 2021 demand for cars recovered after the pandemic just as fewer cars reached deregistration age. In 2026 the government noted that cheaper electric cars were adding to demand.",
@@ -155,7 +155,7 @@ function render(){
     <h2 style="font:800 24px/1.2 var(--display);margin:0">${esc(s.title)}</h2>
     <p class="extract"><b>Extract</b>${esc(s.ext)}</p>
     <div class="tblwrap"><table class="dt"><caption>${esc(T.title)}</caption><tr>${T.cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${T.rows.map(r=>`<tr>${r.map((v,ci)=>`<td>${esc(ci?fmt(v):v)}</td>`).join('')}</tr>`).join('')}</table></div>
-    ${chart(s)}<p class="srcnote">Source: ${esc(s.src)}</p>
+    ${chart(s)}${ARCH?`<p class="srcnote">Source: ${esc(s.src)}</p>`:''}
     ${s.qs.map((q,i)=>`<div class="qbox" id="q${i}"><div class="qhead"><b>(${String.fromCharCode(97+i)})</b><span>[${q.m} mark${q.m>1?'s':''}]</span></div><p class="prompt" style="font-size:17px">${esc(q.q)}</p>${q.t==='mcq'?mcqHTML(q,i):openHTML(q,i)}<div class="qfb"></div></div>`).join('')}
     <div id="sum"></div>`;
   s.qs.forEach((q,i)=>q.t==='mcq'?wireMcq(s,q,i):wireOpen(s,q,i));

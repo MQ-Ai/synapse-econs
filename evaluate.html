@@ -61,7 +61,7 @@
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
-const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const ARCH=(()=>{try{return new URLSearchParams(location.search).get('view')==='architect'||localStorage.getItem('synapse-architect')==='1'}catch(e){return false}})();
 const EVALS=[
  // unstated assumptions
  {t:"assume",k:"2.3",s:"\"Raising the tax on cigarettes will sharply cut smoking.\"",o:["Smokers' demand for cigarettes is price elastic.","Cigarettes create negative externalities.","The government needs more tax revenue.","Cigarettes are a normal good."],a:0,why:"A sharp fall in quantity needs demand to be price elastic. Cigarettes are addictive and demand is usually inelastic, so the claim rests on a doubtful assumption."},
