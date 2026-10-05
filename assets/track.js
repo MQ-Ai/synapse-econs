@@ -101,9 +101,9 @@
     overlay = document.createElement('div'); overlay.id = 'syn-ov';
     overlay.innerHTML =
       '<form id="syn-card" role="dialog" aria-modal="true" aria-labelledby="syn-h" novalidate>' +
-      '<h2 id="syn-h">' + (gate ? 'Sign up to keep going' : 'Welcome to Synapse Econs') + '</h2>' +
+      '<h2 id="syn-h">' + (gate ? 'Sign in to continue' : 'Welcome to Synapse Econs') + '</h2>' +
       '<p>' + (
-        gate ? 'Enter your details to keep practising. It takes 30 seconds.' : 'Enter your details to start. It takes 30 seconds.') + '</p>' +
+        gate ? 'It takes 30 seconds.' : 'It takes 30 seconds.') + '</p>' +
       '<label class="f" for="syn-name">Name</label><input id="syn-name" type="text" autocomplete="name" maxlength="80" required>' +
       '<label class="f" for="syn-school">School</label><input id="syn-school" type="text" autocomplete="organization" maxlength="80" required>' +
       '<label class="f" for="syn-level">Level</label><select id="syn-level" required><option value="">Choose…</option><option>JC1</option><option>JC2</option><option>Other</option></select>' +
