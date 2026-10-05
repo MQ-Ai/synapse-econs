@@ -108,7 +108,7 @@
       '<label class="f" for="syn-school">School</label><input id="syn-school" type="text" autocomplete="organization" maxlength="80" required>' +
       '<label class="f" for="syn-level">Level</label><select id="syn-level" required><option value="">Choose…</option><option>JC1</option><option>JC2</option><option>Other</option></select>' +
       '<label class="f" for="syn-email">Email</label><input id="syn-email" type="email" autocomplete="email" maxlength="120" required>' +
-      '<p class="small">We use your details to see who is using Synapse Econs and how, and keep them private. Your details cannot be changed here after you sign up' + (CFG.contact ? '. To see, correct or delete them, email ' + CFG.contact.replace(/[<>&"]/g, '') : '') + '.</p>' +
+      (CFG.contact ? '<p class="small">Questions about your details? Email ' + CFG.contact.replace(/[<>&"]/g, '') + '.</p>' : '') +
       '<div id="syn-err" role="alert"></div>' +
       '<div class="row"><button type="submit" class="p">' + 'Start' + '</button>' +
       (gate ? '' : '<button type="button" id="syn-skip">Close</button>') +
