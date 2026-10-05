@@ -8,13 +8,12 @@ window.SYNAPSE_TRACK = {
 };
 
 /* Synapse passes (assets/pay.js). Paste each Stripe Payment Link (https://buy.stripe.com/...)
-   into `link`. While both links are empty, everything stays free after sign-in.
+   into `link`. While the link is empty, everything stays free after sign-in.
    The prices here are only what the pay screen shows: the amount charged is set in
    Stripe, and must match PASSES in docs/tracking/apps-script.gs. */
 window.SYNAPSE_PAY = {
   app: 'synapse-econs',
-  year: { link: 'https://buy.stripe.com/test_bJedR8cpk7rl2XvgjJ1oI02', price: 'S$69', until: '31 Dec 2027' },
-  month: { link: 'https://buy.stripe.com/test_00wfZg750dPJ0Pn6J91oI03', price: 'S$15' },
+  year: { link: 'https://buy.stripe.com/test_bJedR8cpk7rl2XvgjJ1oI02', price: 'S$69' },
   covers: 'every round and every Data case in all five labs',
   short: 'Every lab and Data case',
   parent: false
