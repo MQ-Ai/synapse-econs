@@ -61,7 +61,7 @@
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=a=>a[Math.random()*a.length|0];
-const ARCH=new URLSearchParams(location.search).get('view')==='architect';
+const ARCH=(()=>{try{return new URLSearchParams(location.search).get('view')==='architect'||localStorage.getItem('synapse-architect')==='1'}catch(e){return false}})();
 const SCEN=[
  // micro: demand
  {m:"Market for electric cars in Singapore",s:"The government doubles the number of public EV charging points.",c:"D",d:1,why:"Charging points are a complement to EVs. Easier charging raises the benefit of owning an EV, so demand rises at every price."},
