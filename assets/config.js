@@ -13,7 +13,7 @@ window.SYNAPSE_TRACK = {
    Stripe, and must match PASSES in docs/tracking/apps-script.gs. */
 window.SYNAPSE_PAY = {
   app: 'synapse-econs',
-  year: { link: '', price: 'S$69' },
+  year: { link: 'https://buy.stripe.com/cNi6oG8hE7hybpK5So1sQ01', price: 'S$69' },
   covers: 'every round and every Data case in all five labs',
   short: 'Every lab and Data case',
   parent: false
