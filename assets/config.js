@@ -14,7 +14,7 @@ window.SYNAPSE_TRACK = {
 window.SYNAPSE_PAY = {
   app: 'synapse-econs',
   year: { link: 'https://buy.stripe.com/cNi6oG8hE7hybpK5So1sQ01', price: 'S$69' },
-  covers: 'every round and every Data case in all five labs',
-  short: 'Every lab and Data case',
+  covers: 'every round and every Data case in all five labs, for Themes 1 and 2 (micro)',
+  short: 'Themes 1 and 2: every lab and Data case',
   parent: false
 };
