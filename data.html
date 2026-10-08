@@ -25,6 +25,7 @@
     <a href="chains.html" data-page="chains">Chains</a>
     <a href="data.html" data-page="data">Data</a>
     <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+    <a href="progress.html" data-page="progress">My progress</a>
   </div>
 </nav>
 <script>
@@ -119,7 +120,9 @@ const total=s=>s.qs.reduce((a,q)=>a+q.m,0);
 const setEl=document.getElementById('sets');
 SETS.forEach((s,i)=>{const b=document.createElement('button');b.className='lv';b.textContent=`${i+1}. ${s.title}`;b.dataset.k=s.id;b.setAttribute('aria-pressed',st.cur===s.id);
   b.onclick=()=>{st.cur=s.id;save();setEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===s.id));render()};setEl.appendChild(b)});
-function meter(){const got=SETS.reduce((a,s)=>a+(st.best[s.id]||0),0),all=SETS.reduce((a,s)=>a+total(s),0);
+/* mastered count for the My progress page */
+function synM(k,m,n){try{const K='synapse-econs-mastery-v1',p=JSON.parse(localStorage.getItem(K)||'{}')||{};p[k]={m:m,n:n,at:Date.now()};localStorage.setItem(K,JSON.stringify(p))}catch(e){}}
+function meter(){const got=SETS.reduce((a,s)=>a+(st.best[s.id]||0),0),all=SETS.reduce((a,s)=>a+total(s),0);synM('data',got,all);
   document.querySelector('.mbar').style.width=(got/all*100)+'%';document.querySelector('.mnum').textContent=`${got} / ${all} marks`}
 const fmt=v=>typeof v==='number'&&v>=1000?v.toLocaleString('en-SG'):v;
 function chart(s){

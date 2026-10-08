@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Your own progress in Synapse Econs: items mastered and recent scores.">
+<meta property="og:title" content="My progress · Synapse Econs">
+<meta property="og:description" content="Your own progress in Synapse Econs: items mastered and recent scores.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>My progress · Synapse Econs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Catamaran:wght@500;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/lab.css">
+</head>
+<style>
+.stack{display:flex;flex-direction:column;gap:4px}
+.lab{display:block;padding:12px;margin:0 -12px;border-radius:10px;text-decoration:none;color:inherit}
+.lab:hover{background:var(--sunk)}
+.lab-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.lab-name{font:700 18px var(--display)}
+.lab .bar{margin:8px 0 6px}
+.lab-meta{font-size:13px;color:var(--muted)}
+.spark{display:inline-flex;align-items:flex-end;gap:2px;height:16px;vertical-align:-3px;margin-left:6px}
+.spark i{width:5px;background:var(--accent);border-radius:1px}
+h2{font:800 22px var(--display);margin:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:8px 4px;border-top:1px solid var(--line);vertical-align:top}
+tr:first-child td{border-top:0}
+td.r{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.d{color:var(--muted);white-space:nowrap;font-size:13px;width:1%;padding-right:16px}
+td small{color:var(--muted)}
+</style>
+</head>
+<body class="light-nav">
+
+<nav id="site-nav" aria-label="Synapse Econs navigation">
+  <a class="nav-logo" href="index.html">⚡ Synapse Econs</a>
+  <div class="nav-links">
+    <a href="index.html" data-page="home">Home</a>
+    <a href="concepts.html" data-page="concepts">Concepts</a>
+    <a href="shifts.html" data-page="shifts">Diagrams</a>
+    <a href="chains.html" data-page="chains">Chains</a>
+    <a href="data.html" data-page="data">Data</a>
+    <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+    <a href="progress.html" data-page="progress" class="active">My progress</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Synapse · H1 Economics</div>
+    <h1>My progress</h1>
+    <p class="lede">How far you've come in each lab, and your latest scores.</p>
+  </header>
+
+  <section class="card">
+    <h2>Labs</h2>
+    <div class="stack" id="labs"></div>
+  </section>
+
+  <section class="card">
+    <h2>Recent scores</h2>
+    <div id="recent"></div>
+  </section>
+
+  <p class="hint">Your progress is saved on this phone or computer only. If you use a different device or browser, or clear this site's data, it starts fresh.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? d : v; } catch (e) { return d; } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var LABS = [
+    { k: 'concepts', name: 'Concepts', unit: 'terms mastered' },
+    { k: 'shifts', name: 'Diagrams', unit: 'scenarios mastered' },
+    { k: 'chains', name: 'Chains', unit: 'chains mastered' },
+    { k: 'data', name: 'Data', unit: "marks (best per case)" },
+    { k: 'evaluate', name: 'Evaluate', unit: 'questions mastered' }
+  ];
+  var NAME = {}; LABS.forEach(function (l) { NAME[l.k] = l.name; });
+  var mastery = get('synapse-econs-mastery-v1', {});
+  var hist = get('synapse-econs-history-v1', []);
+  if (!Array.isArray(hist)) hist = [];
+
+  function pct(x) { return Math.round(x.score / x.of * 100); }
+  function spark(list) {
+    return '<span class="spark" aria-hidden="true">' + list.map(function (x) {
+      return '<i style="height:' + Math.max(2, Math.round(pct(x) / 100 * 16)) + 'px"></i>';
+    }).join('') + '</span>';
+  }
+
+  $('labs').innerHTML = LABS.map(function (l) {
+    var runs = hist.filter(function (x) { return x.lab === l.k; }), m = mastery[l.k], top = '', bar = '', meta = '';
+    if (m && m.n) {
+      top = m.m + ' / ' + m.n + ' ' + l.unit;
+      bar = '<div class="bar"><i style="width:' + (m.m / m.n * 100) + '%"></i></div>';
+    }
+    if (runs.length) {
+      var r = runs[runs.length - 1];
+      meta = (r.e === 'case' ? 'Last case' : 'Last round') + ': ' + r.score + '/' + r.of + spark(runs.slice(-10));
+    } else if (!top) meta = 'Not started yet';
+    return '<a class="lab" href="' + l.k + '.html"><div class="lab-top"><span class="lab-name">' + l.name + '</span>' +
+      '<span class="num">' + top + '</span></div>' + bar + (meta ? '<div class="lab-meta">' + meta + '</div>' : '') + '</a>';
+  }).join('');
+
+  var recent = hist.slice(-15).reverse();
+  $('recent').innerHTML = recent.length ? '<table>' + recent.map(function (x) {
+    var d = new Date(x.t).toLocaleDateString('en-SG', { day: 'numeric', month: 'short' });
+    return '<tr><td class="d">' + d + '</td><td>' + esc(NAME[x.lab] || x.lab) + '<br><small>' + (x.e === 'case' ? 'Case' : 'Round') +
+      (x.set ? ' · ' + esc(x.set) : '') + '</small></td><td class="r">' + x.score + '/' + x.of + '</td></tr>';
+  }).join('') + '</table>' : '<p class="hint">Finish a round in any lab and your score will show up here.</p>';
+})();
+</script>
+</body>
+</html>

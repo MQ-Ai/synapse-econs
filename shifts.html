@@ -25,6 +25,7 @@
     <a href="chains.html" data-page="chains">Chains</a>
     <a href="data.html" data-page="data">Data</a>
     <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+    <a href="progress.html" data-page="progress">My progress</a>
   </div>
 </nav>
 <script>
@@ -107,7 +108,9 @@ const MASTER=3;const pool=()=>SCEN.filter(v=>inSet(v,st.set));
 const setEl=document.getElementById('sets');
 Object.entries(SETS).forEach(([k,n])=>{const b=document.createElement('button');b.className='lv';b.textContent=n;b.dataset.k=k;b.setAttribute('aria-pressed',st.set===k);
   b.onclick=()=>{st.set=k;setEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===k));save();meter();startDrill()};setEl.appendChild(b)});
-function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+/* mastered count for the My progress page */
+function synM(k,m,n){try{const K='synapse-econs-mastery-v1',p=JSON.parse(localStorage.getItem(K)||'{}')||{};p[k]={m:m,n:n,at:Date.now()};localStorage.setItem(K,JSON.stringify(p))}catch(e){}}
+function meter(){synM('shifts',SCEN.filter(v=>(st.box[v.id]||0)>=MASTER).length,SCEN.length);const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
   document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
 
 const labels=v=>v.macro?{D:'AD',S:'AS',P:'General price level',Q:'Real output',p:'GPL',q:'Y'}:v.lab?{D:'DL',S:'SL',P:'Wage',Q:'Employment',p:'W',q:'L'}:{D:'D',S:'S',P:'Price',Q:'Quantity',p:'P',q:'Q'};
