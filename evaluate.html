@@ -25,6 +25,7 @@
     <a href="chains.html" data-page="chains">Chains</a>
     <a href="data.html" data-page="data">Data</a>
     <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+    <a href="progress.html" data-page="progress">My progress</a>
   </div>
 </nav>
 <script>
@@ -113,7 +114,9 @@ const MASTER=3;const pool=()=>EVALS.filter(v=>st.ty==='all'||v.t===st.ty);
 const tyEl=document.getElementById('types');
 Object.entries(TYPES).forEach(([k,n])=>{const b=document.createElement('button');b.className='lv';b.textContent=n;b.dataset.k=k;b.setAttribute('aria-pressed',st.ty===k);
   b.onclick=()=>{st.ty=k;tyEl.querySelectorAll('.lv').forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===k));save();meter();startDrill()};tyEl.appendChild(b)});
-function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+/* mastered count for the My progress page */
+function synM(k,m,n){try{const K='synapse-econs-mastery-v1',p=JSON.parse(localStorage.getItem(K)||'{}')||{};p[k]={m:m,n:n,at:Date.now()};localStorage.setItem(K,JSON.stringify(p))}catch(e){}}
+function meter(){synM('evaluate',EVALS.filter(v=>(st.box[v.id]||0)>=MASTER).length,EVALS.length);const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
   document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
 let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
 function startDrill(){dq=shuffle(pool()).sort((a,b)=>(st.box[a.id]||0)-(st.box[b.id]||0)).slice(0,8);round={seen:0,first:0};firstSet=new Set();next()}

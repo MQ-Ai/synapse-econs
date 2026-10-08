@@ -25,6 +25,7 @@
     <a href="chains.html" data-page="chains">Chains</a>
     <a href="data.html" data-page="data">Data</a>
     <a href="evaluate.html" data-page="evaluate">Evaluate</a>
+    <a href="progress.html" data-page="progress">My progress</a>
   </div>
 </nav>
 <script>
@@ -213,7 +214,9 @@ const thEl=document.getElementById('themes');
 [1,2,3].forEach(t=>{const b=document.createElement('button');b.className='lv';b.textContent=`${t} · ${THEME_NAMES[t]} (${YEAR[t]})`;b.setAttribute('aria-pressed',st.th.includes(t));
   b.onclick=()=>{const on=st.th.includes(t);if(on&&st.th.length===1)return;st.th=on?st.th.filter(x=>x!==t):[...st.th,t].sort();b.setAttribute('aria-pressed',!on);save();meter();startDrill();renderList()};thEl.appendChild(b)});
 
-function meter(){const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
+/* mastered count for the My progress page */
+function synM(k,m,n){try{const K='synapse-econs-mastery-v1',p=JSON.parse(localStorage.getItem(K)||'{}')||{};p[k]={m:m,n:n,at:Date.now()};localStorage.setItem(K,JSON.stringify(p))}catch(e){}}
+function meter(){synM('concepts',TERMS.filter(v=>(st.box[v.id]||0)>=MASTER).length,TERMS.length);const P=pool(),m=P.filter(v=>(st.box[v.id]||0)>=MASTER).length;
   document.querySelector('.mbar').style.width=(P.length?m/P.length*100:0)+'%';document.querySelector('.mnum').textContent=`${m} / ${P.length}`}
 
 let dq=[],cur=null,round={seen:0,first:0},firstSet=new Set();
